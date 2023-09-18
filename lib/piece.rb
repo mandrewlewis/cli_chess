@@ -1,12 +1,10 @@
 # frozen_string_literal: true
 
-require_relative 'pieces/pawn'
-require_relative 'pieces/rook'
-require_relative 'pieces/knight'
-require_relative 'pieces/bishop'
-require_relative 'pieces/queen'
-require_relative 'pieces/king'
-
 # Generic piece
 class Piece
+  attr_reader :icon, :color
+
+  def initialize(color)
+    @color = color
+  end
 end
