@@ -53,18 +53,20 @@ class Board
     puts columns_string
   end
 
-  def board_state_icons
-    @board_state.sort_by { |key, _| [key[1], key[0]] }
-                .map { |arr| arr[1].nil? ? ' ' : arr[1].icon }
-                .each_slice(8)
-                .to_a
-                .reverse
+  def board_state_icons(board_state = @board_state)
+    board_state.sort_by { |key, _| [key[1], key[0]] }
+               .map { |arr| arr[1].nil? ? ' ' : arr[1].icon }
+               .each_slice(8)
+               .to_a
+               .reverse
   end
 
   private
 
   def new_piece_by_column_letter(column_letter, color)
     piece = nil
+    return piece unless %w[white black].include?(color)
+
     piece = Rook.new(color) if %w[a h].include?(column_letter)
 
     piece = Knight.new(color) if %w[b g].include?(column_letter)
