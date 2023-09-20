@@ -27,50 +27,43 @@ class Board
 
   def place_initial_pieces
     @board_state.each_key do |key|
-      coordinates = symbol_to_col_row_pair(key)
+      coordinates = key.to_s
       color = coordinates[1].to_i < 3 ? 'white' : 'black'
       next if (3..6).include?(coordinates[1].to_i)
 
       @board_state[key] = Pawn.new(color) if %w[2 7].include?(coordinates[1])
 
-      @board_state[key] = return_piece_by_column_letter(coordinates[0], color) if %w[1 8].include?(coordinates[1])
+      @board_state[key] = new_piece_by_column_letter(coordinates[0], color) if %w[1 8].include?(coordinates[1])
     end
   end
 
   def display_board
     system('clear')
-    output_string = <<-HEREDOC
-           a   b   c   d   e   f   g   h
-         +---+---+---+---+---+---+---+---+
-      8  |   |   |   |   |   |   |   |   |  8
-         +---+---+---+---+---+---+---+---+
-      7  |   |   |   |   |   |   |   |   |  7
-         +---+---+---+---+---+---+---+---+
-      6  |   |   |   |   |   |   |   |   |  6
-         +---+---+---+---+---+---+---+---+
-      5  |   |   |   |   |   |   |   |   |  5
-         +---+---+---+---+---+---+---+---+
-      4  |   |   |   |   |   |   |   |   |  4
-         +---+---+---+---+---+---+---+---+
-      3  |   |   |   |   |   |   |   |   |  3
-         +---+---+---+---+---+---+---+---+
-      2  |   |   |   |   |   |   |   |   |  2
-         +---+---+---+---+---+---+---+---+
-      1  |   |   |   |   |   |   |   |   |  1
-         +---+---+---+---+---+---+---+---+
-           a   b   c   d   e   f   g   h
+    border_string = '  +---+---+---+---+---+---+---+---+'
+    columns_string = "    #{[*'a'..'h'].join('   ')}"
+    row_count = 8
 
-    HEREDOC
-    puts output_string
+    puts columns_string
+    board_state_icons.each do |row_arr|
+      puts border_string
+      puts "#{row_count} | #{row_arr.join(' | ')} | #{row_count}"
+      row_count -= 1
+    end
+    puts border_string
+    puts columns_string
+  end
+
+  def board_state_icons
+    @board_state.sort_by { |key, _| [key[1], key[0]] }
+                .map { |arr| arr[1].nil? ? ' ' : arr[1].icon }
+                .each_slice(8)
+                .to_a
+                .reverse
   end
 
   private
 
-  def symbol_to_col_row_pair(sym)
-    sym.to_s.split('')
-  end
-
-  def return_piece_by_column_letter(column_letter, color)
+  def new_piece_by_column_letter(column_letter, color)
     piece = nil
     piece = Rook.new(color) if %w[a h].include?(column_letter)
 
@@ -89,4 +82,4 @@ end
 b = Board.new
 b.build_empty_board
 b.place_initial_pieces
-p b.board_state
+b.display_board
