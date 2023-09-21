@@ -12,6 +12,9 @@ require_relative 'pieces/king'
 class Board
   attr_reader :board_state
 
+  BORDER_STRING = '  +---+---+---+---+---+---+---+---+'
+  COLUMNS_STRING = "    #{[*'a'..'h'].join('   ')}"
+
   def initialize
     @board_state = {}
   end
@@ -38,18 +41,15 @@ class Board
 
   def display_board
     system('clear')
-    border_string = '  +---+---+---+---+---+---+---+---+'
-    columns_string = "    #{[*'a'..'h'].join('   ')}"
     row_count = 8
 
-    puts columns_string
+    puts COLUMNS_STRING
     board_state_icons.each do |row_arr|
-      puts border_string
+      puts BORDER_STRING
       puts "#{row_count} | #{row_arr.join(' | ')} | #{row_count}"
       row_count -= 1
     end
-    puts border_string
-    puts columns_string
+    puts BORDER_STRING, COLUMNS_STRING
   end
 
   def board_state_icons(board_state = @board_state)
