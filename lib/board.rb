@@ -68,6 +68,10 @@ class Board
     @board_state[piece.coordinates] = piece
   end
 
+  def find_piece(coordinates)
+    @board_state[coordinates.downcase.to_sym]
+  end
+
   private
 
   def new_piece_by_column_letter(color, coordinates)
@@ -92,7 +96,11 @@ b = Board.new
 b.build_empty_board
 b.place_initial_pieces
 b.display_board
-puts ' '
-pawn1 = b.board_state[:a2]
+sleep(2)
+pawn1 = b.find_piece(:a2)
+knight1 = b.find_piece('b8')
 b.move_piece(pawn1, 'a4')
+b.display_board
+sleep(2)
+b.move_piece(knight1, 'c6')
 b.display_board

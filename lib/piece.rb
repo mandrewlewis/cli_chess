@@ -3,11 +3,15 @@
 # Generic piece
 class Piece
   attr_accessor :coordinates
-  attr_reader :icon, :color
+  attr_reader :icon, :color, :in_play
+
+  @@pieces = []
 
   def initialize(color, coordinates)
     @color = color
     @coordinates = coordinates
+    @in_play = true
+    @@pieces << self
   end
 
   def coordinates_to_int_pair
@@ -25,5 +29,9 @@ class Piece
 
   def move_self(target)
     @coordinates = target.is_a?(Array) ? int_pair_to_coord_sym(target) : target.downcase.to_sym
+  end
+
+  def self.pieces
+    @@pieces
   end
 end
