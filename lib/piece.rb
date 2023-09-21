@@ -26,4 +26,8 @@ class Piece
   def int_pair_to_coord_sym(int_pair)
     int_pair_to_coord_str(int_pair).to_sym
   end
+
+  def move_self(target)
+    @coordinates = target.is_a?(Array) ? int_pair_to_coord_str(target) : target.downcase
+  end
 end

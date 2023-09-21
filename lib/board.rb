@@ -61,6 +61,12 @@ class Board
                .reverse
   end
 
+  def move_piece(piece, target)
+    @board_state[piece.coordinates.to_sym] = nil
+    piece.move_self(target)
+    @board_state[piece.coordinates.to_sym] = piece
+  end
+
   private
 
   def new_piece_by_column_letter(color, coordinates)
@@ -86,4 +92,6 @@ b.build_empty_board
 b.place_initial_pieces
 b.display_board
 puts ' '
-p b.board_state[:g5]&.int_pair_to_coord_str(coordinates_to_int_pair)
+pawn1 = b.board_state[:a2]
+b.move_piece(pawn1, 'a4')
+b.display_board
