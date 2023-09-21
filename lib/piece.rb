@@ -53,7 +53,31 @@ class Piece
   end
 
   def valid_move?(target)
-    # build
+    vector = check_standard_moves(target)
+    vector = check_special_moves(target) if vector.nil?
+    return false if vector.nil? || piece_in_path?(target, vector) || out_of_bounds(target)
+
+    true
+  end
+
+  def check_standard_moves(target)
+    vector = nil
+    @vectors.each_value { |value| vector = value if apply_vector(value) == coordinates_to_int_pair(target) }
+    vector
+  end
+
+  def check_special_moves(target)
+    vector = nil
+    @special_vectors.each do |hash|
+      next unless condition_met?(hash[:condition])
+
+      hash.each_value do |value|
+        next unless value.is_a?(Array)
+
+        vector = value if apply_vector(value) == coordinates_to_int_pair(target)
+      end
+    end
+    vector
   end
 
   def piece_in_path?(target, vector)
@@ -69,13 +93,12 @@ class Piece
     false
   end
 
-  def self.pieces
-    @@pieces
+  def out_of_bounds(coord_pair)
+    coord_pair = coordinates_to_int_pair(coord_pair)
+    coord_pair.any? { |c| c.negative? || c > 7 }
   end
 
-  private
-
-  def out_of_bounds(coord_pair)
-    coord_pair.any? { |c| c.negative? || c > 7 }
+  def self.pieces
+    @@pieces
   end
 end

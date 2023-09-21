@@ -61,8 +61,10 @@ class Board
   end
 
   def move_piece(piece, target)
+    return nil unless piece.valid_move?
+
     @board_state[piece.coordinates] = nil
-    piece.move_self(target)
+    piece.move!(target)
     @board_state[piece.coordinates] = piece
   end
 
@@ -96,25 +98,29 @@ b.place_initial_pieces
 pawn1 = b.find_piece(:a2)
 pawn2 = b.find_piece(:h2)
 knight1 = b.find_piece('b8')
-
 b.display_board
-sleep(2)
-b.move_piece(pawn1, :a3)
 
-b.display_board
-sleep(2)
-b.move_piece(knight1, 'c6')
 
-b.display_board
-sleep(2)
-b.move_piece(pawn2, 'h4')
+p pawn1.valid_move?(:a4)
 
-b.display_board
-sleep(2)
-b.move_piece(knight1, 'b4')
+# b.display_board
+# sleep(0.5)
+# b.move_piece(pawn1, :a3)
 
-b.display_board
-sleep(2)
-b.move_piece(pawn1, 'b4')
+# b.display_board
+# sleep(0.5)
+# b.move_piece(knight1, 'c6')
 
-b.display_board
+# b.display_board
+# sleep(0.5)
+# b.move_piece(pawn2, 'h4')
+
+# b.display_board
+# sleep(0.5)
+# b.move_piece(knight1, 'b4')
+
+# b.display_board
+# sleep(0.5)
+# b.move_piece(pawn1, 'b4')
+
+# b.display_board
