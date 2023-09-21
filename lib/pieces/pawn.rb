@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
-VECTORS = {
-  forward: [0, 1]
-}.freeze
-
-SPECIAL_VECTORS = [
+VECTORS = [
+  {
+    condition: 'target_unoccupied',
+    forward: [0, 1]
+  },
   {
     condition: 'first_move',
     forward: [0, 2]
   },
   {
-    condition: 'capture',
+    condition: 'capturing',
     left: [-1, 1],
     right: [1, 1]
   }
@@ -25,14 +25,18 @@ class Pawn < Piece
     @icon = @color == 'white' ? '♟︎' : '♙'
     @starting_coordinates = coordinates
     @vectors = VECTORS
-    @special_vectors = SPECIAL_VECTORS
   end
 
   def condition_met?(condition)
     case condition
+    when ''
+      true
+    when 'target_unoccupied'
+      true
     when 'first_move'
       true
-    when 'capture'
+    when 'capturing'
+      # en passant here
       true
     else
       false

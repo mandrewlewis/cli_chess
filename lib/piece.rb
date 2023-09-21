@@ -60,22 +60,15 @@ class Piece
   end
 
   def return_valid_vector(target)
-    vector = check_standard_moves(target)
-    vector = check_special_moves(target) if vector.nil?
+    vector = find_move(target)
     return nil if vector.nil? || piece_in_path?(target, vector) || out_of_bounds(target)
 
     vector
   end
 
-  def check_standard_moves(target)
+  def find_move(target)
     vector = nil
-    @vectors.each_value { |value| vector = value if apply_vector(value) == coordinates_to_int_pair(target) }
-    vector
-  end
-
-  def check_special_moves(target)
-    vector = nil
-    @special_vectors.each do |hash|
+    @vectors.each do |hash|
       next unless condition_met?(hash[:condition])
 
       hash.each_value do |value|
