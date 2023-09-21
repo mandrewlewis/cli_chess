@@ -61,7 +61,7 @@ class Board
   end
 
   def move_piece(piece, target)
-    return nil unless piece.valid_move?
+    return nil unless piece.valid_move?(target)
 
     @board_state[piece.coordinates] = nil
     piece.move!(target)
@@ -99,9 +99,32 @@ pawn1 = b.find_piece(:a2)
 pawn2 = b.find_piece(:h2)
 knight1 = b.find_piece('b8')
 b.display_board
+sleep(1)
 
+target = :a3
+b.move_piece(pawn1, target)
+b.display_board
+sleep(1)
 
-p pawn1.valid_move?(:a4)
+target = :a4
+b.move_piece(pawn1, target)
+b.display_board
+sleep(1)
+
+target = :a5
+b.move_piece(pawn1, target)
+b.display_board
+sleep(1)
+
+target = :a6
+b.move_piece(pawn1, target)
+b.display_board
+sleep(1)
+
+target = :a7
+b.move_piece(pawn1, target)
+b.display_board
+sleep(1)
 
 # b.display_board
 # sleep(0.5)

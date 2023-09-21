@@ -31,7 +31,10 @@ class Piece
     (column + row).to_sym
   end
 
-  def move_self(vector)
+  def move_self(target)
+    vector = return_valid_vector(target)
+    return nil unless valid_move?(target)
+
     @coordinates = int_pair_to_coord_sym(apply_vector(vector))
   end
 
@@ -53,11 +56,15 @@ class Piece
   end
 
   def valid_move?(target)
+    return_valid_vector(target)
+  end
+
+  def return_valid_vector(target)
     vector = check_standard_moves(target)
     vector = check_special_moves(target) if vector.nil?
-    return false if vector.nil? || piece_in_path?(target, vector) || out_of_bounds(target)
+    return nil if vector.nil? || piece_in_path?(target, vector) || out_of_bounds(target)
 
-    true
+    vector
   end
 
   def check_standard_moves(target)
