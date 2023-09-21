@@ -62,9 +62,7 @@ class Board
 
   def move_piece(piece, target)
     @board_state[piece.coordinates] = nil
-    p piece.coordinates
     piece.move_self(target)
-    p piece.coordinates
     @board_state[piece.coordinates] = piece
   end
 
@@ -95,12 +93,28 @@ end
 b = Board.new
 b.build_empty_board
 b.place_initial_pieces
+pawn1 = b.find_piece(:a2)
+pawn2 = b.find_piece(:h2)
+knight1 = b.find_piece('b8')
+
 b.display_board
 sleep(2)
-pawn1 = b.find_piece(:a2)
-knight1 = b.find_piece('b8')
-b.move_piece(pawn1, 'a4')
+b.move_piece(pawn1, :a3)
+
 b.display_board
 sleep(2)
 b.move_piece(knight1, 'c6')
+
+b.display_board
+sleep(2)
+b.move_piece(pawn2, 'h4')
+
+b.display_board
+sleep(2)
+b.move_piece(knight1, 'b4')
+
+b.display_board
+sleep(2)
+b.move_piece(pawn1, 'b4')
+
 b.display_board

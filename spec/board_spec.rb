@@ -85,4 +85,43 @@ describe Board do
       end
     end
   end
+
+  describe '#move_piece' do
+    let(:piece) { board.find_piece('a2') }
+
+    before do
+      board.build_empty_board
+      board.place_initial_pieces
+    end
+
+    it 'should move piece to target location' do
+      board.move_piece(piece, :a4)
+      expect(piece.coordinates).to eql(:a4)
+    end
+
+    it 'should move piece when target is an array' do
+      board.move_piece(piece, [0, 3])
+      expect(piece.coordinates).to eql(:a4)
+    end
+
+    it 'should move piece when target is a string' do
+      board.move_piece(piece, 'A4')
+      expect(piece.coordinates).to eql(:a4)
+    end
+  end
+
+  describe '#find_piece' do
+    before do
+      board.build_empty_board
+      board.place_initial_pieces
+    end
+
+    it 'should return the piece at the given coordinate symbol' do
+      expect(board.find_piece(:d8).class).to eql(Queen)
+    end
+
+    it 'should return the piece at the given coordinate string' do
+      expect(board.find_piece('e8').class).to eql(King)
+    end
+  end
 end
