@@ -17,17 +17,13 @@ class Piece
     ]
   end
 
-  def int_pair_to_coord_str(int_pair)
+  def int_pair_to_coord_sym(int_pair)
     column = [*'a'..'h'][int_pair[0]]
     row = (int_pair[1] + 1).to_s
-    column + row
-  end
-
-  def int_pair_to_coord_sym(int_pair)
-    int_pair_to_coord_str(int_pair).to_sym
+    (column + row).to_sym
   end
 
   def move_self(target)
-    @coordinates = target.is_a?(Array) ? int_pair_to_coord_str(target) : target.downcase
+    @coordinates = target.is_a?(Array) ? int_pair_to_coord_sym(target) : target.downcase.to_sym
   end
 end

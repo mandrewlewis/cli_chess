@@ -27,13 +27,12 @@ class Board
 
   def place_initial_pieces
     @board_state.each_key do |key|
-      coordinates = key.to_s
-      color = coordinates[1].to_i < 3 ? 'white' : 'black'
-      next if (3..6).include?(coordinates[1].to_i)
+      color = key[1].to_i < 3 ? 'white' : 'black'
+      next if (3..6).include?(key[1].to_i)
 
-      @board_state[key] = Pawn.new(color, coordinates) if %w[2 7].include?(coordinates[1])
+      @board_state[key] = Pawn.new(color, key) if %w[2 7].include?(key[1])
 
-      @board_state[key] = new_piece_by_column_letter(color, coordinates) if %w[1 8].include?(coordinates[1])
+      @board_state[key] = new_piece_by_column_letter(color, key) if %w[1 8].include?(key[1])
     end
   end
 
@@ -62,9 +61,11 @@ class Board
   end
 
   def move_piece(piece, target)
-    @board_state[piece.coordinates.to_sym] = nil
+    @board_state[piece.coordinates] = nil
+    p piece.coordinates
     piece.move_self(target)
-    @board_state[piece.coordinates.to_sym] = piece
+    p piece.coordinates
+    @board_state[piece.coordinates] = piece
   end
 
   private
