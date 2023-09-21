@@ -2,7 +2,7 @@
 
 # Bishop
 class Bishop < Piece
-  def initialize(color)
+  def initialize(color, coordinates)
     super
     @icon = @color == 'white' ? '♝' : '♗'
   end

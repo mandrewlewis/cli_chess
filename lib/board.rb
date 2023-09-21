@@ -31,9 +31,9 @@ class Board
       color = coordinates[1].to_i < 3 ? 'white' : 'black'
       next if (3..6).include?(coordinates[1].to_i)
 
-      @board_state[key] = Pawn.new(color) if %w[2 7].include?(coordinates[1])
+      @board_state[key] = Pawn.new(color, coordinates) if %w[2 7].include?(coordinates[1])
 
-      @board_state[key] = new_piece_by_column_letter(coordinates[0], color) if %w[1 8].include?(coordinates[1])
+      @board_state[key] = new_piece_by_column_letter(color, coordinates) if %w[1 8].include?(coordinates[1])
     end
   end
 
@@ -63,19 +63,19 @@ class Board
 
   private
 
-  def new_piece_by_column_letter(column_letter, color)
+  def new_piece_by_column_letter(color, coordinates)
     piece = nil
     return piece unless %w[white black].include?(color)
 
-    piece = Rook.new(color) if %w[a h].include?(column_letter)
+    piece = Rook.new(color, coordinates) if %w[a h].include?(coordinates[0])
 
-    piece = Knight.new(color) if %w[b g].include?(column_letter)
+    piece = Knight.new(color, coordinates) if %w[b g].include?(coordinates[0])
 
-    piece = Bishop.new(color) if %w[c f].include?(column_letter)
+    piece = Bishop.new(color, coordinates) if %w[c f].include?(coordinates[0])
 
-    piece = Queen.new(color) if column_letter == 'd'
+    piece = Queen.new(color, coordinates) if coordinates[0] == 'd'
 
-    piece = King.new(color) if column_letter == 'e'
+    piece = King.new(color, coordinates) if coordinates[0] == 'e'
 
     piece
   end
@@ -85,3 +85,5 @@ b = Board.new
 b.build_empty_board
 b.place_initial_pieces
 b.display_board
+puts ' '
+p b.board_state[:g5]&.int_pair_to_coord_str(coordinates_to_int_pair)
