@@ -56,7 +56,7 @@ class Piece
   end
 
   def valid_move?(target, coordinates = @coordinates)
-    int_pair_to_coord_sym(target)
+    target = int_pair_to_coord_sym(target)
     return_valid_vector(target, coordinates)
   end
 
