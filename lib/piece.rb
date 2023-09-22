@@ -56,6 +56,7 @@ class Piece
   end
 
   def valid_move?(target, coordinates = @coordinates)
+    int_pair_to_coord_sym(target)
     return_valid_vector(target, coordinates)
   end
 
@@ -69,7 +70,7 @@ class Piece
   def find_move(target, coordinates = @coordinates)
     vector = nil
     @vectors.each do |hash|
-      next unless condition_met?(hash[:condition], target)
+      next unless hash[:condition].is_a?(Proc) && hash[:condition].call({ target: target })
 
       hash.each_value do |value|
         next unless value.is_a?(Array)
