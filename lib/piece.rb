@@ -55,35 +55,35 @@ class Piece
     vector[1] = -vector[1]
   end
 
-  def valid_move?(target)
-    return_valid_vector(target)
+  def valid_move?(target, coordinates = @coordinates)
+    return_valid_vector(target, coordinates)
   end
 
-  def return_valid_vector(target)
-    vector = find_move(target)
-    return nil if vector.nil? || piece_in_path?(target, vector) || out_of_bounds(target)
+  def return_valid_vector(target, coordinates = @coordinates)
+    vector = find_move(target, coordinates)
+    return nil if vector.nil? || piece_in_path?(target, vector, coordinates) || out_of_bounds(target)
 
     vector
   end
 
-  def find_move(target)
+  def find_move(target, coordinates = @coordinates)
     vector = nil
     @vectors.each do |hash|
-      next unless condition_met?(hash[:condition])
+      next unless condition_met?(hash[:condition], target)
 
       hash.each_value do |value|
         next unless value.is_a?(Array)
 
-        vector = value if apply_vector(value) == coordinates_to_int_pair(target)
+        vector = value if apply_vector(value, coordinates) == coordinates_to_int_pair(target)
       end
     end
     vector
   end
 
-  def piece_in_path?(target, vector)
-    pointer_coord_pair = coordinates_to_int_pair
+  def piece_in_path?(target, vector, coordinates = @coordinates)
+    pointer_coord_pair = coordinates_to_int_pair(coordinates)
     target_coord_pair = coordinates_to_int_pair(target)
-    other_pieces = Piece.pieces.reject { |p| p == self }
+    other_pieces = Piece.pieces.reject { |p| p.coordinates == coordinates }
     until pointer_coord_pair == target_coord_pair
       blocked = other_pieces.any? { |p| p.coordinates == int_pair_to_coord_sym(pointer_coord_pair) }
       return true if blocked || out_of_bounds(pointer_coord_pair)

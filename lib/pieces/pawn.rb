@@ -27,19 +27,33 @@ class Pawn < Piece
     @vectors = VECTORS
   end
 
-  def condition_met?(condition)
+  def condition_met?(condition, target = nil)
     case condition
     when ''
       true
     when 'target_unoccupied'
-      true
+      target_unoccupied?(target)
     when 'first_move'
-      true
+      first_move?
     when 'capturing'
-      # en passant here
-      true
+      capturing?(target)
     else
       false
     end
+  end
+
+  private
+
+  def target_unoccupied?(target)
+    @@pieces.none? { |p| p.coordinates == int_pair_to_coord_sym(target) }
+  end
+
+  def first_move?
+    @starting_coordinates == @coordinates
+  end
+
+  def capturing?(target)
+    # TO-DO: en passant
+    @@pieces.any? { |p| p.coordinates == int_pair_to_coord_sym(target) }
   end
 end

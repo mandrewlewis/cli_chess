@@ -101,30 +101,13 @@ knight1 = b.find_piece('b8')
 b.display_board
 sleep(1)
 
-target = :a3
-b.move_piece(pawn1, target)
-b.display_board
-sleep(1)
-
-target = :a4
-b.move_piece(pawn1, target)
-b.display_board
-sleep(1)
-
-target = :a5
-b.move_piece(pawn1, target)
-b.display_board
-sleep(1)
-
-target = :a6
-b.move_piece(pawn1, target)
-b.display_board
-sleep(1)
-
-target = :a7
-b.move_piece(pawn1, target)
-b.display_board
-sleep(1)
+moves = %i[a3 a4 a5 b6 a6 b7 c8]
+moves.each do |m|
+  b.move_piece(pawn1, m)
+  b.display_board
+  sleep(1)
+  pawn1.valid_move?(m)
+end
 
 # b.display_board
 # sleep(0.5)
