@@ -35,10 +35,14 @@ class Piece
     vector = return_valid_vector(target)
     return nil unless valid_move?(target)
 
+    destroy_piece(target) if capturing?(target)
+
     @coordinates = int_pair_to_coord_sym(apply_vector(vector))
   end
 
   def move!(target)
+    destroy_piece(target) if capturing?(target)
+
     @coordinates = int_pair_to_coord_sym(target)
   end
 
@@ -97,6 +101,14 @@ class Piece
   def out_of_bounds(coord_pair)
     coord_pair = coordinates_to_int_pair(coord_pair)
     coord_pair.any? { |c| c.negative? || c > 7 }
+  end
+
+  def destroy_piece(coordinates)
+    @@pieces.reject! { |p| p.coordinates == int_pair_to_coord_sym(coordinates) }
+  end
+
+  def capturing?(target)
+    @@pieces.find { |p| p.coordinates == int_pair_to_coord_sym(target) }
   end
 
   def self.pieces
