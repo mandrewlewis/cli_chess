@@ -14,7 +14,7 @@ class Piece
     @@pieces << self
   end
 
-  def coordinates_to_int_pair(coordinates = @coordinates)
+  def to_int_pair(coordinates = @coordinates)
     return coordinates if coordinates.is_a?(Array)
 
     [
@@ -23,7 +23,7 @@ class Piece
     ]
   end
 
-  def int_pair_to_coord_sym(int_pair)
+  def to_coord_sym(int_pair)
     return int_pair.downcase.to_sym if int_pair.is_a?(Symbol) || int_pair.is_a?(String)
 
     column = [*'a'..'h'][int_pair[0]]
@@ -32,24 +32,24 @@ class Piece
   end
 
   def move_self(target)
-    target = int_pair_to_coord_sym(target)
+    target = to_coord_sym(target)
     vector = return_valid_vector(target)
     return nil unless valid_move?(target)
 
     destroy_piece(target) if capturing?(target)
 
-    @coordinates = int_pair_to_coord_sym(apply_vector(vector))
+    @coordinates = to_coord_sym(apply_vector(vector))
   end
 
   def move!(target)
     destroy_piece(target) if capturing?(target)
 
-    @coordinates = int_pair_to_coord_sym(target)
+    @coordinates = to_coord_sym(target)
   end
 
   def apply_vector(vector, coordinates = @coordinates)
     flip_vector(vector) if @color == 'black'
-    coord_pair = coordinates_to_int_pair(coordinates)
+    coord_pair = to_int_pair(coordinates)
     [
       coord_pair[0] + vector[0],
       coord_pair[1] + vector[1]
@@ -61,7 +61,7 @@ class Piece
   end
 
   def valid_move?(target, coordinates = @coordinates)
-    target = int_pair_to_coord_sym(target)
+    target = to_coord_sym(target)
     return_valid_vector(target, coordinates)
   end
 
@@ -80,18 +80,18 @@ class Piece
       hash.each_value do |value|
         next unless value.is_a?(Array)
 
-        vector = value if apply_vector(value, coordinates) == coordinates_to_int_pair(target)
+        vector = value if apply_vector(value, coordinates) == to_int_pair(target)
       end
     end
     vector
   end
 
   def piece_in_path?(target, vector, coordinates = @coordinates)
-    pointer_coord_pair = coordinates_to_int_pair(coordinates)
-    target_coord_pair = coordinates_to_int_pair(target)
+    pointer_coord_pair = to_int_pair(coordinates)
+    target_coord_pair = to_int_pair(target)
     other_pieces = Piece.pieces.reject { |p| p.coordinates == coordinates }
     until pointer_coord_pair == target_coord_pair
-      blocked = other_pieces.any? { |p| p.coordinates == int_pair_to_coord_sym(pointer_coord_pair) }
+      blocked = other_pieces.any? { |p| p.coordinates == to_coord_sym(pointer_coord_pair) }
       return true if blocked || out_of_bounds(pointer_coord_pair)
 
       pointer_coord_pair = apply_vector(vector, pointer_coord_pair)
@@ -100,16 +100,16 @@ class Piece
   end
 
   def out_of_bounds(coord_pair)
-    coord_pair = coordinates_to_int_pair(coord_pair)
+    coord_pair = to_int_pair(coord_pair)
     coord_pair.any? { |c| c.negative? || c > 7 }
   end
 
   def destroy_piece(coordinates)
-    @@pieces.reject! { |p| p.coordinates == int_pair_to_coord_sym(coordinates) }
+    @@pieces.reject! { |p| p.coordinates == to_coord_sym(coordinates) }
   end
 
   def capturing?(target)
-    @@pieces.find { |p| p.coordinates == int_pair_to_coord_sym(target) }
+    @@pieces.find { |p| p.coordinates == to_coord_sym(target) }
   end
 
   def self.pieces
