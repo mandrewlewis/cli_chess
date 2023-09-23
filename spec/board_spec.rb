@@ -8,10 +8,10 @@ describe Board do
   Board.new
 
   describe '#generate_pieces' do
-    let(:pieces) { Piece.pieces }
+    let(:pieces) { board.pieces }
 
     it 'places 32 uniq pieces' do
-      pieces = Piece.pieces
+      pieces = board.pieces
       expect(pieces.size).to eql(32)
     end
 
@@ -62,6 +62,16 @@ describe Board do
 
     it 'should return the piece at the given coordinate string' do
       expect(board.find_piece('e8').class).to eql(King)
+    end
+  end
+
+  describe '#destroy_piece' do
+    let(:pieces) { board.pieces }
+    let(:piece) { board.find_piece('a2') }
+
+    it 'removes piece from pieces' do
+      board.destroy_piece(piece.coordinates)
+      expect(pieces.include?(piece)).to be_falsey
     end
   end
 end

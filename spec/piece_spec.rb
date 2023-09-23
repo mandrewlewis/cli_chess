@@ -4,9 +4,9 @@ require './lib/board'
 require './lib/piece'
 
 describe Piece do
-  Board.new
-  let(:pieces) { Piece.pieces }
-  let(:piece) { Piece.pieces.find { |p| p.coordinates = :a2 } }
+  board = Board.new
+  let(:pieces) { board.pieces }
+  let(:piece) { board.pieces.find { |p| p.coordinates = :a2 } }
 
   describe 'test' do
     it 'has 32 pieces' do
@@ -164,21 +164,13 @@ describe Piece do
 
   describe '#capturing?' do
     it 'returns false if target space is unoccupied' do
-      occ = pieces.first.capturing?(:z99)
+      occ = pieces.first.capturing?(:z9)
       expect(occ).to be_falsey
     end
 
     it 'returns true if target space is occupied' do
       occ = pieces.first.capturing?(:a1)
       expect(occ).to be_truthy
-    end
-  end
-
-  describe '#destroy_piece' do
-    it 'removes piece from pieces' do
-      pawn = pieces.find { |p| p.coordinates == :a3 && p.is_a?(Pawn) }
-      pawn.destroy_piece(pawn.coordinates)
-      expect(pieces.include?(pawn)).to be_falsey
     end
   end
 end

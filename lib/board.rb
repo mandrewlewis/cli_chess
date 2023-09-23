@@ -75,6 +75,8 @@ class Board
   end
 
   def find_piece(coordinates)
+    return nil if coordinates.nil?
+    
     @pieces.find { |p| p.coordinates == coordinates.downcase.to_sym }
   end
 
@@ -89,17 +91,17 @@ class Board
   end
 end
 
-b = Board.new
-pawn1 = b.find_piece(:a2)
-pawn2 = b.find_piece(:h2)
-knight1 = b.find_piece('b8')
-b.display_board
-sleep(1)
+# b = Board.new
+# pawn1 = b.find_piece(:a2)
+# pawn2 = b.find_piece(:h2)
+# knight1 = b.find_piece('b8')
+# b.display_board
+# sleep(1)
 
-moves = %i[a4 a5 b6 a6 b7 c8]
-moves.each do |m|
-  b.move_piece(pawn1, m)
-  b.display_board
-  sleep(1)
-  pawn1.valid_move?(m)
-end
+# moves = %i[a4 a5 b6 a6 b7 c8]
+# moves.each do |m|
+#   b.move_piece(pawn1, m)
+#   b.display_board
+#   sleep(1)
+#   pawn1.valid_move?(m)
+# end
