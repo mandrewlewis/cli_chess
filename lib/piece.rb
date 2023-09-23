@@ -67,7 +67,7 @@ class Piece
 
   def return_valid_vector(target, coordinates = @coordinates)
     vector = find_move(target, coordinates)
-    return nil if vector.nil? || piece_in_path?(target, vector, coordinates) || out_of_bounds(target)
+    return nil if vector.nil? || piece_in_path?(target, vector, coordinates) || out_of_bounds?(target)
 
     vector
   end
@@ -92,14 +92,14 @@ class Piece
     other_pieces = Piece.pieces.reject { |p| p.coordinates == coordinates }
     until pointer_coord_pair == target_coord_pair
       blocked = other_pieces.any? { |p| p.coordinates == to_coord_sym(pointer_coord_pair) }
-      return true if blocked || out_of_bounds(pointer_coord_pair)
+      return true if blocked || out_of_bounds?(pointer_coord_pair)
 
       pointer_coord_pair = apply_vector(vector, pointer_coord_pair)
     end
     false
   end
 
-  def out_of_bounds(coord_pair)
+  def out_of_bounds?(coord_pair)
     coord_pair = to_int_pair(coord_pair)
     coord_pair.any? { |c| c.negative? || c > 7 }
   end

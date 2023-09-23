@@ -23,8 +23,11 @@ class Board
     %i[a1 b1 c1 d1 e1 f1 g1 h1]
   ].freeze
 
+  attr_accessor :pieces
+
   def initialize
     generate_pieces
+    update_pieces
   end
 
   def generate_pieces
@@ -50,7 +53,12 @@ class Board
     end
   end
 
+  def update_pieces
+    @pieces = Piece.pieces
+  end
+
   def display_board
+    update_pieces
     system('clear')
     row_count = 8
 
@@ -75,10 +83,11 @@ class Board
     return nil unless piece.valid_move?(target)
 
     piece.move_self(target)
+    update_pieces
   end
 
   def find_piece(coordinates)
-    Piece.pieces.find { |p| p.coordinates == coordinates.downcase.to_sym }
+    @pieces.find { |p| p.coordinates == coordinates.downcase.to_sym }
   end
 end
 
