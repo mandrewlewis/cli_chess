@@ -30,22 +30,23 @@ class Board
   def generate_pieces
     KEYS.flatten.each do |key|
       color = key[1].to_i < 3 ? 'white' : 'black'
-      next if (3..6).include?(key[1].to_i)
 
-      if %w[2 7].include?(key[1])
-        Pawn.new(color, key)
+      case key.to_s
+      when /\D[3456]/
         next
+      when /\D[27]/
+        Pawn.new(color, key)
+      when /[ah]\d/
+        Rook.new(color, key)
+      when /[bg]\d/
+        Knight.new(color, key)
+      when /[cf]\d/
+        Bishop.new(color, key)
+      when /d\d/
+        Queen.new(color, key)
+      when /e\d/
+        King.new(color, key)
       end
-
-      Rook.new(color, key) if %w[a h].include?(key[0])
-
-      Knight.new(color, key) if %w[b g].include?(key[0])
-
-      Bishop.new(color, key) if %w[c f].include?(key[0])
-
-      Queen.new(color, key) if key[0] == 'd'
-
-      King.new(color, key) if key[0] == 'e'
     end
   end
 
@@ -55,8 +56,7 @@ class Board
 
     puts COLUMNS_STRING
     icons_by_row.each do |row_arr|
-      puts BORDER_STRING
-      puts "#{row_count} | #{row_arr.join(' | ')} | #{row_count}"
+      puts BORDER_STRING, "#{row_count} | #{row_arr.join(' | ')} | #{row_count}"
       row_count -= 1
     end
     puts BORDER_STRING, COLUMNS_STRING
@@ -79,25 +79,6 @@ class Board
 
   def find_piece(coordinates)
     Piece.pieces.find { |p| p.coordinates == coordinates.downcase.to_sym }
-  end
-
-  private
-
-  def new_piece_by_column_letter(color, coordinates)
-    piece = nil
-    return piece unless %w[white black].include?(color)
-
-    piece = Rook.new(color, coordinates) if %w[a h].include?(coordinates[0])
-
-    piece = Knight.new(color, coordinates) if %w[b g].include?(coordinates[0])
-
-    piece = Bishop.new(color, coordinates) if %w[c f].include?(coordinates[0])
-
-    piece = Queen.new(color, coordinates) if coordinates[0] == 'd'
-
-    piece = King.new(color, coordinates) if coordinates[0] == 'e'
-
-    piece
   end
 end
 

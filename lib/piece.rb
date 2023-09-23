@@ -32,6 +32,7 @@ class Piece
   end
 
   def move_self(target)
+    target = int_pair_to_coord_sym(target)
     vector = return_valid_vector(target)
     return nil unless valid_move?(target)
 
