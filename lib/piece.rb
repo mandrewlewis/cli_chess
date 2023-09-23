@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
+require_relative 'conversions'
+
 # Generic piece
 class Piece
+  include Conversions
+
   attr_accessor :coordinates
   attr_reader :icon, :color, :in_play, :board
 
@@ -12,31 +16,13 @@ class Piece
     @in_play = true
   end
 
-  def to_int_pair(coordinates = @coordinates)
-    return nil if out_of_bounds?(coordinates)
-    return coordinates if coordinates.is_a?(Array)
-
-    coordinates = coordinates.downcase
-    [
-      [*'a'..'h'].find_index(coordinates[0]),
-      coordinates[1].to_i - 1
-    ]
-  end
-
-  def to_coord_sym(int_pair)
-    return nil if out_of_bounds?(int_pair)
-    return int_pair.downcase.to_sym if int_pair.is_a?(Symbol) || int_pair.is_a?(String)
-
-    column = [*'a'..'h'][int_pair[0]]
-    row = (int_pair[1] + 1).to_s
-    (column + row).to_sym
-  end
-
   def move_self(target)
     target = to_coord_sym(target)
+    p target
     return nil if target.nil? || target == @coordinates
 
     vector = return_valid_vector(target)
+    return nil if vector.nil?
 
     @board.destroy_piece(target) if capturing?(target)
 

@@ -7,9 +7,12 @@ require_relative 'pieces/knight'
 require_relative 'pieces/bishop'
 require_relative 'pieces/queen'
 require_relative 'pieces/king'
+require_relative 'conversions'
 
 # Stores board state and actions
 class Board
+  include Conversions
+
   BORDER_STRING = '  +---+---+---+---+---+---+---+---+'
   COLUMNS_STRING = "    #{[*'a'..'h'].join('   ')}"
   KEYS = [
@@ -77,7 +80,7 @@ class Board
   def find_piece(coordinates)
     return nil if coordinates.nil?
 
-    @pieces.find { |p| p.coordinates == coordinates.downcase.to_sym }
+    @pieces.find { |p| p.coordinates == to_coord_sym(coordinates) }
   end
 
   def move_piece(piece, target)
