@@ -15,8 +15,10 @@ class Piece
   end
 
   def to_int_pair(coordinates = @coordinates)
+    return nil if out_of_bounds?(coordinates)
     return coordinates if coordinates.is_a?(Array)
 
+    coordinates = coordinates.downcase
     [
       [*'a'..'h'].find_index(coordinates[0]),
       coordinates[1].to_i - 1
@@ -24,6 +26,7 @@ class Piece
   end
 
   def to_coord_sym(int_pair)
+    return nil if out_of_bounds?(int_pair)
     return int_pair.downcase.to_sym if int_pair.is_a?(Symbol) || int_pair.is_a?(String)
 
     column = [*'a'..'h'][int_pair[0]]
@@ -33,22 +36,16 @@ class Piece
 
   def move_self(target)
     target = to_coord_sym(target)
+    return nil if target.nil? || target == @coordinates
+
     vector = return_valid_vector(target)
-    return nil unless valid_move?(target)
 
     destroy_piece(target) if capturing?(target)
 
     @coordinates = to_coord_sym(apply_vector(vector))
   end
 
-  def move!(target)
-    destroy_piece(target) if capturing?(target)
-
-    @coordinates = to_coord_sym(target)
-  end
-
   def apply_vector(vector, coordinates = @coordinates)
-    flip_vector(vector) if @color == 'black'
     coord_pair = to_int_pair(coordinates)
     [
       coord_pair[0] + vector[0],
@@ -58,6 +55,7 @@ class Piece
 
   def flip_vector(vector)
     vector[1] = -vector[1]
+    vector
   end
 
   def valid_move?(target, coordinates = @coordinates)
@@ -79,7 +77,7 @@ class Piece
 
       hash.each_value do |value|
         next unless value.is_a?(Array)
-
+        value = flip_vector(value) if @color == 'black'
         vector = value if apply_vector(value, coordinates) == to_int_pair(target)
       end
     end
@@ -99,17 +97,23 @@ class Piece
     false
   end
 
-  def out_of_bounds?(coord_pair)
-    coord_pair = to_int_pair(coord_pair)
+  def out_of_bounds?(coordinates)
+    coord_pair = []
+    if coordinates.is_a?(Array)
+      coord_pair = coordinates
+    else
+      coord_pair << [*'a'..'z'].find_index(coordinates[0].downcase)
+      coord_pair << coordinates[1].to_i - 1
+    end
     coord_pair.any? { |c| c.negative? || c > 7 }
-  end
-
-  def destroy_piece(coordinates)
-    @@pieces.reject! { |p| p.coordinates == to_coord_sym(coordinates) }
   end
 
   def capturing?(target)
     @@pieces.find { |p| p.coordinates == to_coord_sym(target) }
+  end
+
+  def destroy_piece(coordinates)
+    @@pieces.reject! { |p| p.coordinates == to_coord_sym(coordinates) }
   end
 
   def self.pieces
