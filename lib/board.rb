@@ -39,15 +39,15 @@ class Board
         next
       when /\D[27]/
         @pieces <<  Pawn.new(color, key, self)
-      when /[ah]\d/
+      when /[ah][18]/
         @pieces <<  Rook.new(color, key, self)
-      when /[bg]\d/
+      when /[bg][18]/
         @pieces << Knight.new(color, key, self)
-      when /[cf]\d/
+      when /[cf][18]/
         @pieces << Bishop.new(color, key, self)
-      when /d\d/
+      when /d[18]/
         @pieces << Queen.new(color, key, self)
-      when /e\d/
+      when /e[18]/
         @pieces << King.new(color, key, self)
       end
     end
