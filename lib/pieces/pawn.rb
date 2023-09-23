@@ -4,7 +4,8 @@
 class Pawn < Piece
   VECTORS = [
     {
-      condition: ->(options) { options[:pieces].none? { |p| p.coordinates == options[:target] } },
+      # standard, can't capture forward
+      condition: ->(options) { !options[:caller].capturing?(options[:target]) },
       forward: [0, 1]
     },
     {
@@ -12,7 +13,7 @@ class Pawn < Piece
       forward: [0, 2]
     },
     {
-      condition: ->(options) { options[:pieces].any? { |p| p.coordinates == options[:target] } }, # TO-DO: en passant
+      condition: ->(options) { options[:caller].board.find_piece(options[:target]) }, # TO-DO: en passant
       left: [-1, 1],
       right: [1, 1]
     }

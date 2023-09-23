@@ -71,7 +71,7 @@ class Piece
   def find_move(target, coordinates = @coordinates)
     vector = nil
     @vectors.each do |hash|
-      next unless hash[:condition].is_a?(Proc) && hash[:condition].call({ target: target, pieces: @board.pieces })
+      next unless hash[:condition].is_a?(Proc) && hash[:condition].call({ target: target, caller: self })
 
       hash.each_value do |value|
         next unless value.is_a?(Array)
