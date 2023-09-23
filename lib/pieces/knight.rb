@@ -2,7 +2,7 @@
 
 # Knight
 class Knight < Piece
-  def initialize(color, coordinates)
+  def initialize(color, coordinates, board)
     super
     @icon = @color == 'white' ? '♞' : '♘'
   end

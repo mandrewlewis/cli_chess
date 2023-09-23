@@ -26,8 +26,8 @@ class Board
   attr_accessor :pieces
 
   def initialize
+    @pieces = []
     generate_pieces
-    update_pieces
   end
 
   def generate_pieces
@@ -38,27 +38,22 @@ class Board
       when /\D[3456]/
         next
       when /\D[27]/
-        Pawn.new(color, key)
+        @pieces <<  Pawn.new(color, key, self)
       when /[ah]\d/
-        Rook.new(color, key)
+        @pieces <<  Rook.new(color, key, self)
       when /[bg]\d/
-        Knight.new(color, key)
+        @pieces << Knight.new(color, key, self)
       when /[cf]\d/
-        Bishop.new(color, key)
+        @pieces << Bishop.new(color, key, self)
       when /d\d/
-        Queen.new(color, key)
+        @pieces << Queen.new(color, key, self)
       when /e\d/
-        King.new(color, key)
+        @pieces << King.new(color, key, self)
       end
     end
   end
 
-  def update_pieces
-    @pieces = Piece.pieces
-  end
-
   def display_board
-    update_pieces
     system('clear')
     row_count = 8
 
@@ -79,29 +74,32 @@ class Board
     end
   end
 
+  def find_piece(coordinates)
+    @pieces.find { |p| p.coordinates == coordinates.downcase.to_sym }
+  end
+
   def move_piece(piece, target)
     return nil unless piece.valid_move?(target)
 
     piece.move_self(target)
-    update_pieces
   end
 
-  def find_piece(coordinates)
-    @pieces.find { |p| p.coordinates == coordinates.downcase.to_sym }
+  def destroy_piece(coordinates)
+    @pieces.reject! { |p| p.coordinates == coordinates.downcase.to_sym }
   end
 end
 
-# b = Board.new
-# pawn1 = b.find_piece(:a2)
-# pawn2 = b.find_piece(:h2)
-# knight1 = b.find_piece('b8')
-# b.display_board
-# sleep(1)
+b = Board.new
+pawn1 = b.find_piece(:a2)
+pawn2 = b.find_piece(:h2)
+knight1 = b.find_piece('b8')
+b.display_board
+sleep(1)
 
-# moves = %i[a4 a5 b6 a6 b7 c8]
-# moves.each do |m|
-#   b.move_piece(pawn1, m)
-#   b.display_board
-#   sleep(1)
-#   pawn1.valid_move?(m)
-# end
+moves = %i[a4 a5 b6 a6 b7 c8]
+moves.each do |m|
+  b.move_piece(pawn1, m)
+  b.display_board
+  sleep(1)
+  pawn1.valid_move?(m)
+end

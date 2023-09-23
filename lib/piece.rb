@@ -3,15 +3,13 @@
 # Generic piece
 class Piece
   attr_accessor :coordinates
-  attr_reader :icon, :color, :in_play
+  attr_reader :icon, :color, :in_play, :board
 
-  @@pieces = []
-
-  def initialize(color, coordinates)
+  def initialize(color, coordinates, board)
     @color = color
     @coordinates = coordinates
+    @board = board
     @in_play = true
-    @@pieces << self
   end
 
   def to_int_pair(coordinates = @coordinates)
@@ -40,7 +38,7 @@ class Piece
 
     vector = return_valid_vector(target)
 
-    destroy_piece(target) if capturing?(target)
+    @board.destroy_piece(target) if capturing?(target)
 
     @coordinates = to_coord_sym(apply_vector(vector))
   end
@@ -73,7 +71,7 @@ class Piece
   def find_move(target, coordinates = @coordinates)
     vector = nil
     @vectors.each do |hash|
-      next unless hash[:condition].is_a?(Proc) && hash[:condition].call({ target: target })
+      next unless hash[:condition].is_a?(Proc) && hash[:condition].call({ target: target, pieces: @board.pieces })
 
       hash.each_value do |value|
         next unless value.is_a?(Array)
@@ -87,7 +85,7 @@ class Piece
   def piece_in_path?(target, vector, coordinates = @coordinates)
     pointer_coord_pair = to_int_pair(coordinates)
     target_coord_pair = to_int_pair(target)
-    other_pieces = Piece.pieces.reject { |p| p.coordinates == coordinates }
+    other_pieces = @board.pieces.reject { |p| p.coordinates == coordinates }
     until pointer_coord_pair == target_coord_pair
       blocked = other_pieces.any? { |p| p.coordinates == to_coord_sym(pointer_coord_pair) }
       return true if blocked || out_of_bounds?(pointer_coord_pair)
@@ -109,14 +107,6 @@ class Piece
   end
 
   def capturing?(target)
-    @@pieces.find { |p| p.coordinates == to_coord_sym(target) }
-  end
-
-  def destroy_piece(coordinates)
-    @@pieces.reject! { |p| p.coordinates == to_coord_sym(coordinates) }
-  end
-
-  def self.pieces
-    @@pieces
+    @board.find_piece(to_coord_sym(target))
   end
 end
