@@ -84,27 +84,13 @@ class Board
   end
 
   def move_piece(piece, target)
-    return nil unless piece.valid_move?(target)
+    target = to_coord_sym(target)
+    return nil unless piece.valid_move?(target, piece.coordinates)
 
     piece.move_self(target)
   end
 
   def destroy_piece(coordinates)
-    @pieces.reject! { |p| p.coordinates == coordinates.downcase.to_sym }
+    @pieces.reject! { |p| p.coordinates == to_coord_sym(coordinates) }
   end
-end
-
-b = Board.new
-pawn1 = b.find_piece(:a2)
-pawn2 = b.find_piece(:h2)
-knight1 = b.find_piece('b8')
-b.display_board
-sleep(1)
-
-moves = %i[a4 a5 b6 a6 b7 c8]
-moves.each do |m|
-  b.move_piece(pawn1, m)
-  b.display_board
-  sleep(1)
-  pawn1.valid_move?(m)
 end

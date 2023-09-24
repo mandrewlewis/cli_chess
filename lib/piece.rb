@@ -7,25 +7,23 @@ class Piece
   include Conversions
 
   attr_accessor :coordinates
-  attr_reader :icon, :color, :in_play, :board
+  attr_reader :icon, :color, :board
 
   def initialize(color, coordinates, board)
     @color = color
     @coordinates = coordinates
     @board = board
-    @in_play = true
+  end
+
+  def valid_move?(target, coordinates = @coordinates)
+    find_valid_vector(target, coordinates)
   end
 
   def move_self(target)
-    target = to_coord_sym(target)
-    p target
-    return nil if target.nil? || target == @coordinates
-
-    vector = return_valid_vector(target)
+    vector = find_valid_vector(target)
     return nil if vector.nil?
 
     @board.destroy_piece(target) if capturing?(target)
-
     @coordinates = to_coord_sym(apply_vector(vector))
   end
 
@@ -42,41 +40,34 @@ class Piece
     vector
   end
 
-  def valid_move?(target, coordinates = @coordinates)
-    target = to_coord_sym(target)
-    return_valid_vector(target, coordinates)
-  end
-
-  def return_valid_vector(target, coordinates = @coordinates)
+  def find_valid_vector(target, coordinates = @coordinates)
     vector = find_move(target, coordinates)
-    return nil if vector.nil? || piece_in_path?(target, vector, coordinates) || out_of_bounds?(target)
+    return nil if vector.nil? || piece_in_path?(to_int_pair(target), vector, to_int_pair(coordinates)) || out_of_bounds?(target)
 
     vector
   end
 
   def find_move(target, coordinates = @coordinates)
-    vector = nil
-    @vectors.each do |hash|
-      next unless hash[:condition].is_a?(Proc) && hash[:condition].call({ target: target, caller: self })
-
-      hash.each_value do |value|
-        next unless value.is_a?(Array)
-        value = flip_vector(value) if @color == 'black'
-        vector = value if apply_vector(value, coordinates) == to_int_pair(target)
+    @vectors.select { |hash| condition_met?(hash, target) }.each do |hash|
+      hash.reject { |k, _| k == :condition }.each_value do |vector|
+        vector = flip_vector(vector) if @color == 'black'
+        return vector if apply_vector(vector, coordinates) == to_int_pair(target)
       end
     end
-    vector
+    nil
+  end
+
+  def condition_met?(hash, target)
+    hash[:condition].call({ target: target, caller: self }) if hash[:condition].is_a?(Proc)
   end
 
   def piece_in_path?(target, vector, coordinates = @coordinates)
-    pointer_coord_pair = to_int_pair(coordinates)
-    target_coord_pair = to_int_pair(target)
-    other_pieces = @board.pieces.reject { |p| p.coordinates == coordinates }
-    until pointer_coord_pair == target_coord_pair
-      blocked = other_pieces.any? { |p| p.coordinates == to_coord_sym(pointer_coord_pair) }
-      return true if blocked || out_of_bounds?(pointer_coord_pair)
+    other_pieces = @board.pieces.reject { |p| p.coordinates == to_coord_sym(coordinates) }
+    until coordinates == target
+      blocked = other_pieces.any? { |p| p.coordinates == to_coord_sym(coordinates) }
+      return true if blocked || out_of_bounds?(coordinates)
 
-      pointer_coord_pair = apply_vector(vector, pointer_coord_pair)
+      coordinates = apply_vector(vector, coordinates)
     end
     false
   end
