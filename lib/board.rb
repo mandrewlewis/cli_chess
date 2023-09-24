@@ -57,7 +57,6 @@ class Board
   end
 
   def display_board
-    system('clear')
     row_count = 8
 
     puts COLUMNS_STRING
@@ -65,7 +64,7 @@ class Board
       puts BORDER_STRING, "#{row_count} | #{row_arr.join(' | ')} | #{row_count}"
       row_count -= 1
     end
-    puts BORDER_STRING, COLUMNS_STRING
+    puts BORDER_STRING, COLUMNS_STRING, ''
   end
 
   def icons_by_row

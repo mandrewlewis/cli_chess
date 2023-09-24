@@ -16,9 +16,11 @@ module Printable
     print "#{color} player name: "
   end
 
-  def print_turn
-    puts <<~HEREDOC
-      Your turn!
-    HEREDOC
+  def print_request_piece(player)
+    print "#{player.name}, which piece? -> "
+  end
+
+  def print_request_target(piece)
+    print "Move #{piece.class.to_s.downcase} where? -> "
   end
 end
