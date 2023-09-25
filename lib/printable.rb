@@ -26,4 +26,9 @@ module Printable
     print "Move #{piece.class.to_s.downcase} where? -> "
     gets.chomp
   end
+
+  def print_game_over
+    print "Game Over!"
+    sleep(5)
+  end
 end

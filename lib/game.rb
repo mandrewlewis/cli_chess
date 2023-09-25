@@ -39,6 +39,7 @@ class Game
       @board.move_piece(piece, target, vector)
       @current_player = @players.next
     end
+    print_game_over
   end
 
   def player_turn
@@ -61,6 +62,10 @@ class Game
   end
 
   def game_over?
-    false
+    white_pieces = @board.pieces.select { |p| p.color == 'white' }
+    black_pieces = @board.pieces.select { |p| p.color == 'black' }
+    kings = @board.pieces.select { |p| p.class.instance_of?(King) }
+
+    white_pieces.empty? || black_pieces.empty? || kings.size < 2 ? true : false
   end
 end
