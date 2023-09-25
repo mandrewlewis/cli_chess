@@ -38,7 +38,7 @@ class Game
     until game_over?
       piece, target, vector = player_turn
       capture = piece.capturing?(target)
-      @flash = ['notice', "#{capture.color.capitalize} #{capture.class.to_s.downcase} captured!"] unless capture.nil?
+      @flash = ['notice', "#{capture.color.capitalize} #{capture.class.to_s.downcase} captured!"] if capture
       @board.move_piece(piece, target, vector)
       @current_player = @players.next
     end

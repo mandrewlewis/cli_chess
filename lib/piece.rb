@@ -38,7 +38,10 @@ class Piece
 
   def find_valid_vector(target, coordinates = @coordinates)
     vector = find_move(target, coordinates)
-    return nil if vector.nil? || piece_in_path?(to_int_pair(target), vector, to_int_pair(coordinates)) || out_of_bounds?(target)
+    return nil if vector.nil? ||
+                  piece_in_path?(to_int_pair(target), vector, to_int_pair(coordinates)) ||
+                  out_of_bounds?(target) ||
+                  same_color?(target)
 
     vector
   end
@@ -80,5 +83,12 @@ class Piece
 
   def capturing?(target)
     @board.find_piece(to_coord_sym(target))
+  end
+
+  def same_color?(target)
+    target_piece = @board.find_piece(to_coord_sym(target))
+    return false if target_piece.nil?
+
+    @color == target_piece.color
   end
 end
