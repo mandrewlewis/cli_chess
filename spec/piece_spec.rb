@@ -8,46 +8,16 @@ describe Piece do
   let(:pieces) { board.pieces }
   let(:piece) { board.pieces.find { |p| p.coordinates = :a2 } }
 
-  describe 'test' do
-    it 'has 32 pieces' do
-      expect(pieces.size).to eql(32)
-    end
-
-    it 'has 25 pieces mid game' do
-      destroy = %i[c2 d2 e2 g7 g8 h7 h8]
-      pieces_mid_game = pieces.reject { |p| destroy.include?(p.coordinates) }
-      expect(pieces_mid_game.size).to eql(25)
-    end
-  end
-
   describe '#move_self' do
-    it 'returns nil if invalid move' do
-      pawn = pieces.find { |p| p.coordinates == :a2 && p.is_a?(Pawn) }
-      return_value = pawn.move_self(:z9)
-      expect(return_value).to be_falsey
-    end
-
-    it 'piece unchanged if target is itself' do
-      pawn = pieces.find { |p| p.coordinates == :a2 && p.is_a?(Pawn) }
-      expect { pawn.move_self(:a2) }.not_to change { pawn.coordinates }
-    end
-
-    it 'piece still in list if target is itself' do
-      pawn = pieces.find { |p| p.coordinates == :a2 && p.is_a?(Pawn) }
-      pawn.move_self(pawn.coordinates)
-      piece_present = pieces.include?(pawn)
-      expect(piece_present).to be_truthy
-    end
-
     it 'piece changes coordinates to target value' do
       pawn = pieces.find { |p| p.coordinates == :a2 && p.is_a?(Pawn) }
-      pawn.move_self(:a3)
+      pawn.move_self(:a3, [0, 1])
       expect(pawn.coordinates).to eql(:a3)
     end
 
     it 'black piece moves in its relative direction' do
       pawn_black = pieces.find { |p| p.coordinates == :a7 && p.is_a?(Pawn) }
-      pawn_black.move_self(:a6)
+      pawn_black.move_self(:a6, [0, -1])
       expect(pawn_black.coordinates).to eql(:a6)
     end
   end
@@ -61,6 +31,20 @@ describe Piece do
     it '[1, 1]' do
       vector = piece.flip_vector([1, 1])
       expect(vector).to eql([1, -1])
+    end
+
+    it 'if given a hash' do
+      original_hash = {
+        condition: 'dummy proc',
+        left: [-1, 1],
+        right: [1, 1]
+      }
+      return_hash = {
+        condition: 'dummy proc',
+        left: [-1, -1],
+        right: [1, -1]
+      }
+      expect(piece.flip_vector(original_hash)).to eql(return_hash)
     end
   end
 

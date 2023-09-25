@@ -64,7 +64,7 @@ class Game
   def game_over?
     white_pieces = @board.pieces.select { |p| p.color == 'white' }
     black_pieces = @board.pieces.select { |p| p.color == 'black' }
-    kings = @board.pieces.select { |p| p.class.instance_of?(King) }
+    kings = @board.pieces.select { |p| p.is_a?(King) }
 
     white_pieces.empty? || black_pieces.empty? || kings.size < 2 ? true : false
   end

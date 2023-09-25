@@ -27,10 +27,7 @@ class Piece
 
   def apply_vector(vector, coordinates = @coordinates)
     coord_pair = to_int_pair(coordinates)
-    [
-      coord_pair[0] + vector[0],
-      coord_pair[1] + vector[1]
-    ]
+    [coord_pair[0] + vector[0], coord_pair[1] + vector[1]]
   end
 
   def flip_vector(vector)

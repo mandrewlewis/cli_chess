@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require './lib/board'
-require './lib/piece.rb'
+require './lib/piece'
 
 describe Board do
   subject(:board) { described_class.new }
@@ -40,17 +40,17 @@ describe Board do
     let(:piece) { board.find_piece('a2') }
 
     it 'should move piece to target location' do
-      board.move_piece(piece, :a4)
+      board.move_piece(piece, :a4, [0, 2])
       expect(piece.coordinates).to eql(:a4)
     end
 
     it 'should move piece when target is an array' do
-      board.move_piece(piece, [0, 3])
+      board.move_piece(piece, [0, 3], [0, 2])
       expect(piece.coordinates).to eql(:a4)
     end
 
     it 'should move piece when target is a string' do
-      board.move_piece(piece, 'A4')
+      board.move_piece(piece, 'A4', [0, 2])
       expect(piece.coordinates).to eql(:a4)
     end
   end
