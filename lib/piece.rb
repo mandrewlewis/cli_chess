@@ -7,11 +7,12 @@ class Piece
   include Conversions
 
   attr_accessor :coordinates
-  attr_reader :icon, :color, :board
+  attr_reader :icon, :color, :board, :starting_coordinates
 
   def initialize(color, coordinates, board)
     @color = color
     @coordinates = coordinates
+    @starting_coordinates = coordinates
     @board = board
   end
 
@@ -19,10 +20,7 @@ class Piece
     find_valid_vector(target, coordinates)
   end
 
-  def move_self(target)
-    vector = find_valid_vector(target)
-    return nil if vector.nil?
-
+  def move_self(target, vector)
     @board.destroy_piece(target) if capturing?(target)
     @coordinates = to_coord_sym(apply_vector(vector))
   end
@@ -36,8 +34,9 @@ class Piece
   end
 
   def flip_vector(vector)
-    vector[1] = -vector[1]
-    vector
+    return [vector[0], -vector[1]] if vector.is_a?(Array)
+
+    vector.map { |k, v| k == :condition ? [k, v] : [k, [v[0], -v[1]]] }.to_h
   end
 
   def find_valid_vector(target, coordinates = @coordinates)
@@ -50,7 +49,6 @@ class Piece
   def find_move(target, coordinates = @coordinates)
     @vectors.select { |hash| condition_met?(hash, target) }.each do |hash|
       hash.reject { |k, _| k == :condition }.each_value do |vector|
-        vector = flip_vector(vector) if @color == 'black'
         return vector if apply_vector(vector, coordinates) == to_int_pair(target)
       end
     end

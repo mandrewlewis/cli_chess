@@ -35,9 +35,8 @@ class Game
 
   def game_loop
     until game_over?
-      piece, target = player_turn
-      # move
-      # check win conditions
+      piece, target, vector = player_turn
+      @board.move_piece(piece, target, vector)
       @current_player = @players.next
     end
   end
@@ -49,10 +48,11 @@ class Game
       piece = @board.find_piece(print_request_piece(current_player))
       next unless !piece.nil? && can_move?(current_player, piece)
 
-      target = print_request_target(piece)
-      next unless piece.valid_move?(to_coord_sym(target))
+      target = to_coord_sym(print_request_target(piece))
+      vector = piece.valid_move?(target)
+      next unless vector
 
-      return [piece, target]
+      return [piece, target, vector]
     end
   end
 

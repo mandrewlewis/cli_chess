@@ -82,11 +82,8 @@ class Board
     @pieces.find { |p| p.coordinates == to_coord_sym(coordinates) }
   end
 
-  def move_piece(piece, target)
-    target = to_coord_sym(target)
-    return nil unless piece.valid_move?(target, piece.coordinates)
-
-    piece.move_self(target)
+  def move_piece(piece, target, vector)
+    piece.move_self(target, vector)
   end
 
   def destroy_piece(coordinates)

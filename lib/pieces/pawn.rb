@@ -9,7 +9,7 @@ class Pawn < Piece
       forward: [0, 1]
     },
     {
-      condition: ->(_) { @starting_coordinates == @coordinates },
+      condition: ->(options) { options[:caller].starting_coordinates == options[:caller].coordinates },
       forward: [0, 2]
     },
     {
@@ -17,14 +17,16 @@ class Pawn < Piece
       left: [-1, 1],
       right: [1, 1]
     }
-  ].freeze
+  ]
 
   attr_reader :vectors, :special_vectors
 
   def initialize(color, coordinates, board)
     super
     @icon = @color == 'white' ? '♟︎' : '♙'
-    @starting_coordinates = coordinates
     @vectors = VECTORS
+    return unless color == 'black'
+
+    @vectors = @vectors.map { |hash| flip_vector(hash) }
   end
 end
