@@ -27,6 +27,14 @@ module Printable
     gets.chomp
   end
 
+  def print_flash_notice(notice)
+    puts "    ➣ #{notice[1]}", ''
+  end
+
+  def print_flash_error(error)
+    puts "    ✖ #{error[1]} ✖", ''
+  end
+
   def print_game_over
     print "Game Over!"
     sleep(5)
