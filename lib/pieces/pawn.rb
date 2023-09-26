@@ -4,18 +4,20 @@
 class Pawn < Piece
   VECTORS = [
     {
-      # standard, can't capture forward
+      # can't capture forward
       condition: ->(options) { !options[:caller].capturing?(options[:target]) },
       forward: [0, 1]
     },
     {
+      # must be first move
       condition: ->(options) { options[:caller].starting_coordinates == options[:caller].coordinates },
-      forward: [0, 2]
+      first_forward: [0, 2]
     },
     {
+      # must be capturing
       condition: ->(options) { options[:caller].board.find_piece(options[:target]) }, # TO-DO: en passant
-      left: [-1, 1],
-      right: [1, 1]
+      capture_left: [-1, 1],
+      capture_right: [1, 1]
     }
   ]
 
