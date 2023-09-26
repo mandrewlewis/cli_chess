@@ -1,5 +1,11 @@
 # frozen_string_literal: true
 
+require_relative 'rook'
+require_relative 'knight'
+require_relative 'bishop'
+require_relative 'queen'
+require_relative 'king'
+
 # Pawn
 class Pawn < Piece
   VECTORS = [
@@ -30,5 +36,16 @@ class Pawn < Piece
     return unless color == 'black'
 
     @vectors = @vectors.map { |hash| flip_vector(hash) }
+  end
+
+  def move_self(target, vector)
+    @board.destroy_piece(target) if capturing?(target)
+    @coordinates = to_coord_sym(apply_vector(vector))
+    promotion if is_a?(Pawn) && %w[1 8].include?(@coordinates[1])
+  end
+
+  def promotion
+    @board.destroy_piece(@coordinates)
+    board.pieces << Queen.new(@color, @coordinates, @board)
   end
 end

@@ -21,6 +21,7 @@ class Game
   end
 
   def start_game
+    dev_setup_method
     print_welcome
     assign_players
     game_loop
@@ -99,5 +100,11 @@ class Game
 
     @flash[0] == 'notice' ? print_flash_notice(@flash) : print_flash_error(@flash)
     @flash = nil
+  end
+
+  def dev_setup_method
+    remove_pieces = %i[a7 a8]
+    @board.pieces.reject! { |p| remove_pieces.include?(p.coordinates) }
+    @board.find_piece(:a2).move_self(:a7, [0, 5])
   end
 end
