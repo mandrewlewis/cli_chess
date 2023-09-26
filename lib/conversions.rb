@@ -19,4 +19,11 @@ module Conversions
 
     (column + row).to_sym
   end
+
+  def coord_sym_adjacents(coordinates)
+    int_pair = to_int_pair(coordinates)
+    left = [int_pair[0] - 1, int_pair[1]]
+    right = [int_pair[0] + 1, int_pair[1]]
+    [to_coord_sym(left), to_coord_sym(right)]
+  end
 end

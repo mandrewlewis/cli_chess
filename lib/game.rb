@@ -11,13 +11,14 @@ class Game
   include Printable
   include Conversions
 
-  attr_reader :players
-  attr_accessor :current_player, :error
+  attr_reader :players, :previous_move
+  attr_accessor :current_player, :error, :flash
 
   def initialize
     @players = []
-    @board = Board.new
+    @board = Board.new(self)
     @flash = nil
+    @previous_move = nil
   end
 
   def start_game
@@ -42,6 +43,7 @@ class Game
       @flash = ['notice', "#{capture.color.capitalize} #{capture.class.to_s.downcase} captured!"] if capture
       @board.move_piece(piece, target, vector)
       @current_player = @players.next
+      @previous_move = [piece, target, vector]
     end
     print_game_over
   end
@@ -103,8 +105,8 @@ class Game
   end
 
   def dev_setup_method
-    remove_pieces = %i[a7 a8]
-    @board.pieces.reject! { |p| remove_pieces.include?(p.coordinates) }
-    @board.find_piece(:a2).move_self(:a7, [0, 5])
+    # remove_pieces = %i[a7 a8]
+    # @board.pieces.reject! { |p| remove_pieces.include?(p.coordinates) }
+    @board.find_piece(:g2).move_self(:g5, [0, 3])
   end
 end

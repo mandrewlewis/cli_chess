@@ -5,9 +5,12 @@ require_relative 'knight'
 require_relative 'bishop'
 require_relative 'queen'
 require_relative 'king'
+require_relative '../conversions'
 
 # Pawn
 class Pawn < Piece
+  include Conversions
+
   VECTORS = [
     {
       # can't capture forward
@@ -21,11 +24,17 @@ class Pawn < Piece
     },
     {
       # must be capturing
-      condition: ->(options) { options[:caller].board.find_piece(options[:target]) }, # TO-DO: en passant
+      condition: ->(options) { options[:caller].board.find_piece(options[:target]) },
+      capture_left: [-1, 1],
+      capture_right: [1, 1]
+    },
+    {
+      # en passant
+      condition: ->(options) { options[:caller].en_passant? },
       capture_left: [-1, 1],
       capture_right: [1, 1]
     }
-  ]
+  ].freeze
 
   attr_reader :vectors, :special_vectors
 
@@ -40,6 +49,7 @@ class Pawn < Piece
 
   def move_self(target, vector)
     @board.destroy_piece(target) if capturing?(target)
+    preform_en_passant if en_passant?
     @coordinates = to_coord_sym(apply_vector(vector))
     promotion if is_a?(Pawn) && %w[1 8].include?(@coordinates[1])
   end
@@ -47,5 +57,20 @@ class Pawn < Piece
   def promotion
     @board.destroy_piece(@coordinates)
     board.pieces << Queen.new(@color, @coordinates, @board)
+  end
+
+  def en_passant?
+    piece, target, vector = @board.game.previous_move
+    return if piece.nil?
+
+    coord_sym_adjacents(target).include?(@coordinates) &&
+      piece.color != @color &&
+      vector[1].abs == 2
+  end
+
+  def preform_en_passant
+    piece, target = @board.game.previous_move
+    @board.destroy_piece(target)
+    @board.game.flash = ['notice', "#{piece.color.capitalize} #{piece.class.to_s.downcase} captured!"]
   end
 end
