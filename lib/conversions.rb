@@ -33,4 +33,12 @@ module Conversions
       vector[1].zero? ? 0 : vector[1] / (vector[1]).abs
     ]
   end
+
+  def trim_vector_by_one(vector)
+    mini = minimize_vector(vector)
+    [
+      vector[0] - mini[0],
+      vector[1] - mini[1]
+    ]
+  end
 end

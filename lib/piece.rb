@@ -26,6 +26,8 @@ class Piece
   end
 
   def apply_vector(vector, coordinates = @coordinates)
+    return nil if vector.nil?
+
     coord_pair = to_int_pair(coordinates)
     [coord_pair[0] + vector[0], coord_pair[1] + vector[1]]
   end
@@ -49,6 +51,7 @@ class Piece
   def find_move(target, coordinates = @coordinates)
     @vectors.select { |hash| condition_met?(hash, target) }.each do |hash|
       hash.reject { |k, _| k == :condition }.each_value do |vector|
+        vector = trim_vector_to_target(vector, target)
         return vector if apply_vector(vector, coordinates) == to_int_pair(target)
       end
     end
@@ -56,7 +59,7 @@ class Piece
   end
 
   def condition_met?(hash, target)
-    hash[:condition].call({ target: target, caller: self }) if hash[:condition].is_a?(Proc)
+    hash[:condition].is_a?(Proc) ? hash[:condition].call({ target: target, caller: self }) : true
   end
 
   def piece_in_path?(target, vector, coordinates = @coordinates)
@@ -90,5 +93,14 @@ class Piece
     return false if target_piece.nil?
 
     @color == target_piece.color
+  end
+
+  def trim_vector_to_target(vector, target)
+    until vector == minimize_vector(vector)
+      return vector if apply_vector(vector) == to_int_pair(target)
+
+      vector = trim_vector_by_one(vector)
+    end
+    vector
   end
 end

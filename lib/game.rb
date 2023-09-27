@@ -105,8 +105,8 @@ class Game
   end
 
   def dev_setup_method
-    # remove_pieces = %i[a7 a8]
-    # @board.pieces.reject! { |p| remove_pieces.include?(p.coordinates) }
-    @board.find_piece(:g2).move_self(:g5, [0, 3])
+    remove_pieces = %i[a2 a8]
+    @board.pieces.reject! { |p| remove_pieces.include?(p.coordinates) }
+    # @board.find_piece(:g2).move_self(:g5, [0, 3]) # en passant setup
   end
 end
