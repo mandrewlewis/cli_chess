@@ -26,7 +26,7 @@ class Pawn < Piece
     },
     {
       # en passant
-      condition: ->(options) { options[:caller].en_passant? },
+      condition: ->(options) { options[:caller].en_passant?(options[:target]) },
       capture_left: [-1, 1],
       capture_right: [1, 1]
     }
@@ -45,7 +45,7 @@ class Pawn < Piece
 
   def move_self(target, vector)
     @board.destroy_piece(target) if capturing?(target)
-    preform_en_passant if en_passant?
+    preform_en_passant if en_passant?(target)
     @coordinates = to_coord_sym(apply_vector(vector))
     promotion if is_a?(Pawn) && %w[1 8].include?(@coordinates[1])
   end
@@ -55,13 +55,14 @@ class Pawn < Piece
     board.pieces << Queen.new(@color, @coordinates, @board)
   end
 
-  def en_passant?
+  def en_passant?(player_target)
     piece, target, vector = @board.game.previous_move
     return if piece.nil?
 
     coord_sym_adjacents(target).include?(@coordinates) &&
       piece.color != @color &&
-      vector[1].abs == 2
+      vector[1].abs == 2 &&
+      player_target[0] == target[0]
   end
 
   def preform_en_passant
