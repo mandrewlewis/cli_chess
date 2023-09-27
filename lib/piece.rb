@@ -51,7 +51,7 @@ class Piece
   def find_move(target, coordinates = @coordinates)
     @vectors.select { |hash| condition_met?(hash, target) }.each do |hash|
       hash.reject { |k, _| k == :condition }.each_value do |vector|
-        vector = trim_vector_to_target(vector, target)
+        vector = trim_vector_to_target(vector, target) unless piece_in_path?(target, vector)
         return vector if apply_vector(vector, coordinates) == to_int_pair(target)
       end
     end
@@ -63,17 +63,23 @@ class Piece
   end
 
   def piece_in_path?(target, vector, coordinates = @coordinates)
+    target = to_coord_sym(target)
+    coordinates = to_coord_sym(coordinates)
     other_pieces = @board.pieces.reject { |p| p.coordinates == to_coord_sym(coordinates) }
     until coordinates == target
-      blocked = other_pieces.any? { |p| p.coordinates == to_coord_sym(coordinates) }
-      return true if blocked || out_of_bounds?(coordinates)
+      return false if out_of_bounds?(coordinates)
 
-      coordinates = apply_vector(minimize_vector(vector), coordinates)
+      blocked = other_pieces.any? { |p| p.coordinates == to_coord_sym(coordinates) }
+      return true if blocked
+
+      coordinates = to_coord_sym(apply_vector(minimize_vector(vector), coordinates))
     end
     false
   end
 
   def out_of_bounds?(coordinates)
+    return true if coordinates.nil?
+
     coord_pair = []
     if coordinates.is_a?(Array)
       coord_pair = coordinates

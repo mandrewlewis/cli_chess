@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
+require './lib/game'
 require './lib/board'
 require './lib/piece'
 require './lib/pieces/pawn'
 
 describe Pawn do
-  let(:board) { Board.new }
+  let(:game) { Game.new }
+  let(:board) { game.board }
   let(:w_pawn) { board.find_piece(:b2) }
   let(:b_pawn) { board.find_piece(:g7) }
 
@@ -58,6 +60,7 @@ describe Pawn do
       pawn = Pawn.new('white', :e5, board)
       real_b_pawn = board.find_piece(:f7)
       real_b_pawn.move_self(:f5, [0, -2])
+      game.previous_move = [real_b_pawn, :f5, [0, -2]]
       moved = pawn.valid_move?(:f6)
       expect(moved).to eql([1, 1])
     end
@@ -101,7 +104,8 @@ describe Pawn do
     end
 
     it 'can\'t move forward if target is occupied' do
-      bad_pawn = Pawn.new('white', :a6, board)
+      bad_pawn = Pawn.new('white', :a5, board)
+      bad_pawn.move_self(:a4, [0, 1])
       moved = bad_pawn.valid_move?(:a7)
       expect(moved).to be_falsey
     end

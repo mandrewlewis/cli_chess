@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
+require './lib/game'
 require './lib/board'
 require './lib/piece'
 
 describe Conversions do
-  board = Board.new
+  game = Game.new
+  board = game.board
   let(:pieces) { board.pieces }
   let(:piece) { board.pieces.find { |p| p.coordinates = :a2 } }
 

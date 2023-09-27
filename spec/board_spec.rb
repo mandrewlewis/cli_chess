@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
+require './lib/game'
 require './lib/board'
 require './lib/piece'
 
 describe Board do
-  subject(:board) { described_class.new }
-  Board.new
+  let(:game) { Game.new }
+  subject(:board) { game.board }
+  Game.new
 
   describe '#generate_pieces' do
     let(:pieces) { board.pieces }

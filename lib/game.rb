@@ -11,8 +11,8 @@ class Game
   include Printable
   include Conversions
 
-  attr_reader :players, :previous_move
-  attr_accessor :current_player, :error, :flash
+  attr_reader :players, :board
+  attr_accessor :current_player, :error, :flash, :previous_move
 
   def initialize
     @players = []
