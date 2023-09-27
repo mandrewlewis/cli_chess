@@ -26,4 +26,11 @@ module Conversions
     right = [int_pair[0] + 1, int_pair[1]]
     [to_coord_sym(left), to_coord_sym(right)]
   end
+
+  def minimize_vector(vector)
+    [
+      vector[0].zero? ? 0 : vector[0] / (vector[0]).abs,
+      vector[1].zero? ? 0 : vector[1] / (vector[1]).abs
+    ]
+  end
 end

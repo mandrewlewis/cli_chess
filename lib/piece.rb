@@ -65,7 +65,7 @@ class Piece
       blocked = other_pieces.any? { |p| p.coordinates == to_coord_sym(coordinates) }
       return true if blocked || out_of_bounds?(coordinates)
 
-      coordinates = apply_vector(vector, coordinates)
+      coordinates = apply_vector(minimize_vector(vector), coordinates)
     end
     false
   end
