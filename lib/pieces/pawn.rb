@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'rook'
-require_relative 'knight'
-require_relative 'bishop'
 require_relative 'queen'
-require_relative 'king'
 require_relative '../conversions'
 
 # Pawn
@@ -36,7 +32,7 @@ class Pawn < Piece
     }
   ].freeze
 
-  attr_reader :vectors, :special_vectors
+  attr_reader :vectors
 
   def initialize(color, coordinates, board)
     super
