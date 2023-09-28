@@ -36,7 +36,7 @@ module Printable
   end
 
   def print_game_over
-    print "Game Over!"
+    print 'Game Over!'
     sleep(5)
   end
 end

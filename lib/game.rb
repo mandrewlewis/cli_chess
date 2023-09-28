@@ -11,16 +11,18 @@ class Game
   include Printable
   include Conversions
 
-  attr_reader :players
-  attr_accessor :current_player, :error
+  attr_reader :players, :board
+  attr_accessor :current_player, :error, :flash, :previous_move
 
   def initialize
     @players = []
-    @board = Board.new
+    @board = Board.new(self)
     @flash = nil
+    @previous_move = nil
   end
 
   def start_game
+    dev_setup_method
     print_welcome
     assign_players
     game_loop
@@ -37,12 +39,11 @@ class Game
   def game_loop
     until game_over?
       piece, target, vector = player_turn
-      captured_piece = piece.capturing?(target)
-      unless captured_piece.nil?
-        @flash = ['notice', "#{captured_piece.color.capitalize} #{captured_piece.class.to_s.downcase} captured!"]
-      end
+      capture = piece.capturing?(target)
+      @flash = ['notice', "#{capture.color.capitalize} #{capture.class.to_s.downcase} captured!"] if capture
       @board.move_piece(piece, target, vector)
       @current_player = @players.next
+      @previous_move = [piece, target, vector]
     end
     print_game_over
   end
@@ -75,8 +76,8 @@ class Game
 
   def request_target(piece)
     target = to_coord_sym(print_request_target(piece))
-    vector = piece.valid_move?(target)
-    if target.nil?
+    vector = piece.valid_move?(target) unless piece.out_of_bounds?(target)
+    if target.nil? || piece.out_of_bounds?(target)
       @flash = ['error', 'Not a valid target']
     elsif vector.nil?
       @flash = ['error', 'Not a valid move']
@@ -101,5 +102,11 @@ class Game
 
     @flash[0] == 'notice' ? print_flash_notice(@flash) : print_flash_error(@flash)
     @flash = nil
+  end
+
+  def dev_setup_method
+    remove_pieces = %i[a2 a8]
+    @board.pieces.reject! { |p| remove_pieces.include?(p.coordinates) }
+    # @board.find_piece(:g2).move_self(:g5, [0, 3]) # en passant setup
   end
 end

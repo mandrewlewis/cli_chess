@@ -19,4 +19,26 @@ module Conversions
 
     (column + row).to_sym
   end
+
+  def coord_sym_adjacents(coordinates)
+    int_pair = to_int_pair(coordinates)
+    left = [int_pair[0] - 1, int_pair[1]]
+    right = [int_pair[0] + 1, int_pair[1]]
+    [to_coord_sym(left), to_coord_sym(right)]
+  end
+
+  def minimize_vector(vector)
+    [
+      vector[0].zero? ? 0 : vector[0] / (vector[0]).abs,
+      vector[1].zero? ? 0 : vector[1] / (vector[1]).abs
+    ]
+  end
+
+  def trim_vector_by_one(vector)
+    mini = minimize_vector(vector)
+    [
+      vector[0] - mini[0],
+      vector[1] - mini[1]
+    ]
+  end
 end

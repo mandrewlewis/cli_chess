@@ -26,6 +26,8 @@ class Piece
   end
 
   def apply_vector(vector, coordinates = @coordinates)
+    return nil if vector.nil?
+
     coord_pair = to_int_pair(coordinates)
     [coord_pair[0] + vector[0], coord_pair[1] + vector[1]]
   end
@@ -38,7 +40,10 @@ class Piece
 
   def find_valid_vector(target, coordinates = @coordinates)
     vector = find_move(target, coordinates)
-    return nil if vector.nil? || piece_in_path?(to_int_pair(target), vector, to_int_pair(coordinates)) || out_of_bounds?(target)
+    return nil if vector.nil? ||
+                  piece_in_path?(to_int_pair(target), vector, to_int_pair(coordinates)) ||
+                  out_of_bounds?(target) ||
+                  same_color?(target)
 
     vector
   end
@@ -46,6 +51,7 @@ class Piece
   def find_move(target, coordinates = @coordinates)
     @vectors.select { |hash| condition_met?(hash, target) }.each do |hash|
       hash.reject { |k, _| k == :condition }.each_value do |vector|
+        vector = trim_vector_to_target(vector, target) unless piece_in_path?(target, vector)
         return vector if apply_vector(vector, coordinates) == to_int_pair(target)
       end
     end
@@ -53,21 +59,27 @@ class Piece
   end
 
   def condition_met?(hash, target)
-    hash[:condition].call({ target: target, caller: self }) if hash[:condition].is_a?(Proc)
+    hash[:condition].is_a?(Proc) ? hash[:condition].call({ target: target, caller: self }) : true
   end
 
   def piece_in_path?(target, vector, coordinates = @coordinates)
+    target = to_coord_sym(target)
+    coordinates = to_coord_sym(coordinates)
     other_pieces = @board.pieces.reject { |p| p.coordinates == to_coord_sym(coordinates) }
     until coordinates == target
-      blocked = other_pieces.any? { |p| p.coordinates == to_coord_sym(coordinates) }
-      return true if blocked || out_of_bounds?(coordinates)
+      return false if out_of_bounds?(coordinates)
 
-      coordinates = apply_vector(vector, coordinates)
+      blocked = other_pieces.any? { |p| p.coordinates == to_coord_sym(coordinates) }
+      return true if blocked
+
+      coordinates = to_coord_sym(apply_vector(minimize_vector(vector), coordinates))
     end
     false
   end
 
   def out_of_bounds?(coordinates)
+    return true if coordinates.nil?
+
     coord_pair = []
     if coordinates.is_a?(Array)
       coord_pair = coordinates
@@ -80,5 +92,21 @@ class Piece
 
   def capturing?(target)
     @board.find_piece(to_coord_sym(target))
+  end
+
+  def same_color?(target)
+    target_piece = @board.find_piece(to_coord_sym(target))
+    return false if target_piece.nil?
+
+    @color == target_piece.color
+  end
+
+  def trim_vector_to_target(vector, target)
+    until vector == minimize_vector(vector)
+      return vector if apply_vector(vector) == to_int_pair(target)
+
+      vector = trim_vector_by_one(vector)
+    end
+    vector
   end
 end
