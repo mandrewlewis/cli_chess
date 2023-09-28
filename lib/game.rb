@@ -76,8 +76,8 @@ class Game
 
   def request_target(piece)
     target = to_coord_sym(print_request_target(piece))
-    vector = piece.valid_move?(target)
-    if target.nil?
+    vector = piece.valid_move?(target) unless piece.out_of_bounds?(target)
+    if target.nil? || piece.out_of_bounds?(target)
       @flash = ['error', 'Not a valid target']
     elsif vector.nil?
       @flash = ['error', 'Not a valid move']
