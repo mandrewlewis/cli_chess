@@ -75,6 +75,7 @@ class Piece
       return true if blocked
 
       coordinates = to_coord_sym(apply_vector(minimize_vector(vector), coordinates))
+      return false if coordinates == @coordinates
     end
     false
   end
