@@ -11,7 +11,7 @@ class Game
   include Printable
   include Conversions
 
-  attr_reader :players, :board
+  attr_reader :players, :board, :check
   attr_accessor :current_player, :error, :flash, :previous_move
 
   def initialize
@@ -19,6 +19,7 @@ class Game
     @board = Board.new(self)
     @flash = nil
     @previous_move = nil
+    @check = false
   end
 
   def start_game
@@ -44,6 +45,7 @@ class Game
       @board.move_piece(piece, target, vector)
       @current_player = @players.next
       @previous_move = [piece, target, vector]
+      @check = check?
     end
     print_game_over
   end
@@ -68,7 +70,7 @@ class Game
     piece = @board.find_piece(print_request_piece(@current_player))
     if piece.nil?
       @flash = ['error', 'No such piece']
-    elsif !can_move?(@current_player, piece)
+    elsif piece.color != current_player.color
       @flash = ['error', 'Not your piece']
     end
     piece
@@ -85,8 +87,40 @@ class Game
     [target, vector]
   end
 
-  def can_move?(player, piece)
-    piece.color == player.color
+  def check?
+    king = board.pieces.find { |p| p.is_a?(King) && p.color == current_player.color }
+    @previous_move[0].valid_move?(king.coordinates)
+  end
+
+  def check_resolved?(piece, target)
+    king = board.pieces.find { |p| p.is_a?(King) && p.color == current_player.color }
+    king_moved_out_of_check?(piece, target, king) ||
+      captured_attacker?(piece, target) ||
+      piece_in_path_to_king?(piece, target, king)
+  end
+
+  def king_moved_out_of_check?(piece, target, king)
+    return false unless piece == king
+
+    opp_pieces = board.pieces.reject { |p| p.color == current_player.color }
+    opp_pieces.each { |opp| return false if opp.valid_move?(target) }
+    true
+  end
+
+  def captured_attacker?(piece, target)
+    piece.capturing?(target) == @previous_move[0]
+  end
+
+  def piece_in_path_to_king?(piece, target, king)
+    prev_coord = piece.coord
+    piece.coordinates = target
+    blocked = !@previous_move[0].valid_move?(king.coordinates)
+    piece.coordinates = prev_coord
+    blocked
+  end
+
+  def check_mate?
+    false
   end
 
   def game_over?
@@ -94,7 +128,7 @@ class Game
     black_pieces = @board.pieces.select { |p| p.color == 'black' }
     kings = @board.pieces.select { |p| p.is_a?(King) }
 
-    white_pieces.empty? || black_pieces.empty? || kings.size < 2 ? true : false
+    white_pieces.empty? || black_pieces.empty? || kings.size < 2
   end
 
   def flash_msg
@@ -105,7 +139,7 @@ class Game
   end
 
   def dev_setup_method
-    remove_pieces = %i[a2 a8]
+    remove_pieces = %i[d7 e7]
     @board.pieces.reject! { |p| remove_pieces.include?(p.coordinates) }
     # @board.find_piece(:g2).move_self(:g5, [0, 3]) # en passant setup
   end
