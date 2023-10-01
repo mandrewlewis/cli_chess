@@ -11,7 +11,7 @@ class Game
   include Printable
   include Conversions
 
-  attr_reader :players, :board, :check
+  attr_reader :players, :board, :check, :mate
   attr_accessor :current_player, :error, :flash, :previous_move
 
   def initialize
@@ -20,6 +20,7 @@ class Game
     @flash = nil
     @previous_move = nil
     @check = false
+    @mate = false
   end
 
   def start_game
@@ -46,6 +47,8 @@ class Game
       @current_player = @players.next
       @previous_move = [piece, target, vector]
       @check = check?
+      @mate = check_mate? if @check
+
       if @check
         @flash = @flash.nil? ? ['notice', 'Check!'] : @flash.push('Check!')
       end
@@ -125,7 +128,12 @@ class Game
   end
 
   def check_mate?
-    false
+    player_pieces = board.pieces.select { |p| p.color == current_player.color }
+    player_pieces.each do |p|
+      valid_moves = @board.keys.flatten.select { |k| p.valid_move?(k) }
+      valid_moves.each { |vm| return false if check_resolved?(p, vm) }
+    end
+    true
   end
 
   def game_over?
@@ -133,7 +141,7 @@ class Game
     black_pieces = @board.pieces.select { |p| p.color == 'black' }
     kings = @board.pieces.select { |p| p.is_a?(King) }
 
-    white_pieces.empty? || black_pieces.empty? || kings.size < 2
+    white_pieces.empty? || black_pieces.empty? || kings.size < 2 || @mate
   end
 
   def flash_msg
@@ -144,8 +152,8 @@ class Game
   end
 
   def dev_setup_method
-    remove_pieces = %i[d7 e7 e2]
+    remove_pieces = %i[]
     @board.pieces.reject! { |p| remove_pieces.include?(p.coordinates) }
-    @board.find_piece(:a7).move_self(:a6, [0, -1]) # en passant setup
+    # @board.find_piece(:a7).move_self(:a6, [0, -1]) # en passant setup
   end
 end

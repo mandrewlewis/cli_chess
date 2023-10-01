@@ -26,11 +26,12 @@ class Board
     %i[a1 b1 c1 d1 e1 f1 g1 h1]
   ].freeze
 
-  attr_reader :game
+  attr_reader :game, :keys
   attr_accessor :pieces
 
   def initialize(game)
     @game = game
+    @keys = KEYS
     @pieces = []
     generate_pieces
   end

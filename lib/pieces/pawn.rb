@@ -15,7 +15,10 @@ class Pawn < Piece
     },
     {
       # must be first move
-      condition: ->(options) { options[:caller].starting_coordinates == options[:caller].coordinates },
+      condition: lambda do |options|
+        options[:caller].starting_coordinates == options[:caller].coordinates &&
+          !options[:caller].capturing?(options[:target])
+      end,
       first_forward: [0, 2]
     },
     {
