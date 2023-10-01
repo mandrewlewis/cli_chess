@@ -46,6 +46,9 @@ class Game
       @current_player = @players.next
       @previous_move = [piece, target, vector]
       @check = check?
+      if @check
+        @flash = @flash.nil? ? ['notice', 'Check!'] : @flash.push('Check!')
+      end
     end
     print_game_over
   end
@@ -83,6 +86,8 @@ class Game
       @flash = ['error', 'Not a valid target']
     elsif vector.nil?
       @flash = ['error', 'Not a valid move']
+    elsif @check && !check_resolved?(piece, target)
+      @flash = ['error', 'Must get out of check']
     end
     [target, vector]
   end
@@ -112,7 +117,7 @@ class Game
   end
 
   def piece_in_path_to_king?(piece, target, king)
-    prev_coord = piece.coord
+    prev_coord = piece.coordinates
     piece.coordinates = target
     blocked = !@previous_move[0].valid_move?(king.coordinates)
     piece.coordinates = prev_coord
@@ -139,8 +144,8 @@ class Game
   end
 
   def dev_setup_method
-    remove_pieces = %i[d7 e7]
+    remove_pieces = %i[d7 e7 e2]
     @board.pieces.reject! { |p| remove_pieces.include?(p.coordinates) }
-    # @board.find_piece(:g2).move_self(:g5, [0, 3]) # en passant setup
+    @board.find_piece(:a7).move_self(:a6, [0, -1]) # en passant setup
   end
 end

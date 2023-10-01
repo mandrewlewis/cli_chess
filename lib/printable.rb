@@ -29,10 +29,11 @@ module Printable
 
   def print_flash_notice(notice)
     puts "    ➣ #{notice[1]}", ''
+    puts "    ➣ #{notice[2]}", '' unless notice[2].nil?
   end
 
   def print_flash_error(error)
-    puts "    ✖ #{error[1]} ✖", ''
+    puts "    ✖ #{error[1]}", ''
   end
 
   def print_game_over
