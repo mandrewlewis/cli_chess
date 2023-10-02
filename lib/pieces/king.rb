@@ -34,11 +34,11 @@ class King < Piece
   end
 
   def castle_valid?(target)
-    return false if @has_castled || @coordinates != @starting_coordinates || @board.game.check
+    return false if @has_castled || !@first_move || @board.game.check
 
     castle, direction = return_castle(target)
     to_castle_vector = direction == 'left' ? [-4, 0] : [3, 0]
-    (castle.coordinates == castle.starting_coordinates) && !piece_in_path?(castle.coordinates, to_castle_vector)
+    castle.first_move && !piece_in_path?(castle.coordinates, to_castle_vector)
   end
 
   def handle_castling(target, vector)

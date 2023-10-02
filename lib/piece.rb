@@ -7,12 +7,12 @@ class Piece
   include Conversions
 
   attr_accessor :coordinates
-  attr_reader :icon, :color, :board, :starting_coordinates
+  attr_reader :icon, :color, :board, :first_move
 
   def initialize(color, coordinates, board)
     @color = color
     @coordinates = coordinates
-    @starting_coordinates = coordinates
+    @first_move = true
     @board = board
   end
 
@@ -21,6 +21,7 @@ class Piece
   end
 
   def move_self(target, vector)
+    @first_move = false
     @board.destroy_piece(target) if capturing?(target)
     @coordinates = to_coord_sym(apply_vector(vector))
   end

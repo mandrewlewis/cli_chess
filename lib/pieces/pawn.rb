@@ -15,10 +15,7 @@ class Pawn < Piece
     },
     {
       # must be first move
-      condition: lambda do |options|
-        options[:caller].starting_coordinates == options[:caller].coordinates &&
-          !options[:caller].capturing?(options[:target])
-      end,
+      condition: ->(options) { options[:caller].first_move && !options[:caller].capturing?(options[:target]) },
       first_forward: [0, 2]
     },
     {
@@ -47,6 +44,7 @@ class Pawn < Piece
   end
 
   def move_self(target, vector)
+    @first_move = false
     @board.destroy_piece(target) if capturing?(target)
     preform_en_passant if en_passant?(target)
     @coordinates = to_coord_sym(apply_vector(vector))
