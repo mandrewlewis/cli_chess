@@ -43,6 +43,7 @@ class Game
       piece, target, vector = player_turn
       capture = piece.capturing?(target)
       @flash = ['notice', "#{capture.color.capitalize} #{capture.class.to_s.downcase} captured!"] if capture
+      piece.handle_castling(target, vector) if piece.is_a?(King)
       @board.move_piece(piece, target, vector)
       @current_player = @players.next
       @previous_move = [piece, target, vector]
@@ -152,7 +153,7 @@ class Game
   end
 
   def dev_setup_method
-    remove_pieces = %i[]
+    remove_pieces = %i[b8 c8 d8 f8 g8]
     @board.pieces.reject! { |p| remove_pieces.include?(p.coordinates) }
     # @board.find_piece(:a7).move_self(:a6, [0, -1]) # en passant setup
   end
