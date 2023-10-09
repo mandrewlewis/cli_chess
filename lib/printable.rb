@@ -36,8 +36,8 @@ module Printable
     puts "    ✖ #{error[1]}", ''
   end
 
-  def print_game_over
-    print 'Game Over!'
+  def print_game_over(player)
+    print "GAME OVER, #{player.name} wins!"
     sleep(5)
   end
 end

@@ -54,7 +54,9 @@ class Game
         @flash = @flash.nil? ? ['notice', 'Check!'] : @flash.push('Check!')
       end
     end
-    print_game_over
+    system('clear')
+    @board.display_board
+    print_game_over(@players.next)
   end
 
   def player_turn
@@ -153,8 +155,7 @@ class Game
   end
 
   def dev_setup_method
-    remove_pieces = %i[b8 c8 d8 f8 g8]
+    remove_pieces = %i[]
     @board.pieces.reject! { |p| remove_pieces.include?(p.coordinates) }
-    # @board.find_piece(:a7).move_self(:a6, [0, -1]) # en passant setup
   end
 end
