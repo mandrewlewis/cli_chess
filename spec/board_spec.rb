@@ -42,17 +42,17 @@ describe Board do
     let(:piece) { board.find_piece('a2') }
 
     it 'should move piece to target location' do
-      board.move_piece(piece, :a4, [0, 2])
+      board.move_piece(piece, :a4)
       expect(piece.coordinates).to eql(:a4)
     end
 
     it 'should move piece when target is an array' do
-      board.move_piece(piece, [0, 3], [0, 2])
+      board.move_piece(piece, [0, 3])
       expect(piece.coordinates).to eql(:a4)
     end
 
     it 'should move piece when target is a string' do
-      board.move_piece(piece, 'A4', [0, 2])
+      board.move_piece(piece, 'A4')
       expect(piece.coordinates).to eql(:a4)
     end
   end

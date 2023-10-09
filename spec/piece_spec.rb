@@ -13,13 +13,13 @@ describe Piece do
   describe '#move_self' do
     it 'piece changes coordinates to target value' do
       pawn = pieces.find { |p| p.coordinates == :a2 && p.is_a?(Pawn) }
-      pawn.move_self(:a3, [0, 1])
+      pawn.move_self(:a3)
       expect(pawn.coordinates).to eql(:a3)
     end
 
     it 'black piece moves in its relative direction' do
       pawn_black = pieces.find { |p| p.coordinates == :a7 && p.is_a?(Pawn) }
-      pawn_black.move_self(:a6, [0, -1])
+      pawn_black.move_self(:a6)
       expect(pawn_black.coordinates).to eql(:a6)
     end
   end

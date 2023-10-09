@@ -22,22 +22,20 @@ describe Bishop do
     end
 
     it 'forward right some (w)' do
-      w_bishop.move_self(:a3, [-2, 2])
+      w_bishop.move_self(:a3)
       moved = w_bishop.valid_move?(:c5)
       expect(moved).to eql([2, 2])
     end
 
     it 'back left some (w)' do
-      w_bishop.move_self(:a3, [-2, 2])
-      w_bishop.move_self(:c5, [2, 2])
+      w_bishop.move_self(:a3)
+      w_bishop.move_self(:c5)
       moved = w_bishop.valid_move?(:a3)
       expect(moved).to eql([-2, -2])
     end
 
-    it 'back left some (w)' do
-      w_bishop.move_self(:a3, [-2, 2])
-      w_bishop.move_self(:c5, [2, 2])
-      w_bishop.move_self(:c5, [-2, -2])
+    it 'back right some (w)' do
+      w_bishop.move_self(:a3)
       moved = w_bishop.valid_move?(:c1)
       expect(moved).to eql([2, -2])
     end

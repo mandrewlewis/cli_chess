@@ -12,9 +12,9 @@ describe Knight do
 
   context 'valid moves' do
     before do
-      w_knight.move_self(:a3, [-1, 2])
-      w_knight.move_self(:c4, [2, 1])
-      w_knight.move_self(:e5, [2, 1])
+      w_knight.move_self(:a3)
+      w_knight.move_self(:c4)
+      w_knight.move_self(:e5)
     end
 
     it 'forward right (w)' do

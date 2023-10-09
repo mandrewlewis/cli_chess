@@ -46,7 +46,7 @@ class King < Piece
 
     castle, = return_castle(target)
     castle_target = to_coord_sym(apply_vector(minimize_vector(vector)))
-    castle.move_self(castle_target, castle.find_valid_vector(castle_target))
+    castle.move_self(castle_target)
   end
 
   def return_castle(target)

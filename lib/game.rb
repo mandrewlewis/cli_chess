@@ -93,7 +93,7 @@ class Game
   end
 
   def setup_next_turn(piece, target, vector)
-    @board.move_piece(piece, target, vector)
+    @board.move_piece(piece, target)
     @current_player = @players.next
     @previous_move = [piece, target, vector]
     @check = check?

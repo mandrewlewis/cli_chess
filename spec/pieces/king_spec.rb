@@ -22,27 +22,27 @@ describe King do
     end
 
     it 'forward and capture (w)' do
-      w_king.move_self(:e6, [0, 5])
+      w_king.move_self(:e6)
       moved = w_king.valid_move?(:e7)
       expect(moved).to eql([0, 1])
     end
 
     it 'backward (w)' do
-      w_king.move_self(:e2, [0, 1])
+      w_king.move_self(:e2)
       moved = w_king.valid_move?(:e1)
       expect(moved).to eql([0, -1])
     end
 
     it 'right (w)' do
-      w_king.move_self(:e2, [0, 1])
-      w_king.move_self(:e3, [0, 1])
+      w_king.move_self(:e2)
+      w_king.move_self(:e3)
       moved = w_king.valid_move?(:f3)
       expect(moved).to eql([1, 0])
     end
 
     it 'left (w)' do
-      w_king.move_self(:e2, [0, 1])
-      w_king.move_self(:e3, [0, 1])
+      w_king.move_self(:e2)
+      w_king.move_self(:e3)
       moved = w_king.valid_move?(:d3)
       expect(moved).to eql([-1, 0])
     end
@@ -58,13 +58,13 @@ describe King do
     end
 
     it 'back left (w)' do
-      w_king.move_self(:f2, [1, 1])
+      w_king.move_self(:f2)
       moved = w_king.valid_move?(:e1)
       expect(moved).to eql([-1, -1])
     end
 
     it 'back right (w)' do
-      w_king.move_self(:d2, [-1, 1])
+      w_king.move_self(:d2)
       moved = w_king.valid_move?(:e1)
       expect(moved).to eql([1, -1])
     end
@@ -92,14 +92,14 @@ describe King do
     end
 
     it 'can\'t castle if rook moved' do
-      board.find_piece(:a1).move_self(:b1, [1, 0])
+      board.find_piece(:a1).move_self(:b1)
       moved = w_king.valid_move?(:c1)
       expect(moved).to be_falsey
     end
 
     it 'can\'t castle if king moved' do
-      b_king.move_self(:d8, [-1, 0])
-      b_king.move_self(:e8, [1, 0])
+      b_king.move_self(:d8)
+      b_king.move_self(:e8)
       moved = b_king.valid_move?(:c8)
       expect(moved).to be_falsey
     end

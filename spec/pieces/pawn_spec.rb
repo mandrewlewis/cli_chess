@@ -59,7 +59,7 @@ describe Pawn do
     it 'en passant' do
       pawn = Pawn.new('white', :e5, board)
       real_b_pawn = board.find_piece(:f7)
-      real_b_pawn.move_self(:f5, [0, -2])
+      real_b_pawn.move_self(:f5)
       game.previous_move = [real_b_pawn, :f5, [0, -2]]
       moved = pawn.valid_move?(:f6)
       expect(moved).to eql([1, 1])
@@ -68,11 +68,11 @@ describe Pawn do
     it 'promotion' do
       board.destroy_piece(:a8)
       board.destroy_piece(:a7)
-      w_pawn.move_self(:a4, [0, 2])
-      w_pawn.move_self(:a5, [0, 1])
-      w_pawn.move_self(:a6, [0, 1])
-      w_pawn.move_self(:a7, [0, 1])
-      w_pawn.move_self(:a8, [0, 1])
+      w_pawn.move_self(:a4)
+      w_pawn.move_self(:a5)
+      w_pawn.move_self(:a6)
+      w_pawn.move_self(:a7)
+      w_pawn.move_self(:a8)
       expect(board.pieces.include?(w_pawn)).to be_falsey
     end
   end
@@ -92,7 +92,7 @@ describe Pawn do
 
     it 'can\'t move forward two if not initial move' do
       bad_pawn = Pawn.new('white', :a2, board)
-      bad_pawn.move_self(:a3, [0, 1])
+      bad_pawn.move_self(:a3)
       moved = bad_pawn.valid_move?(:a5)
       expect(moved).to be_falsey
     end
@@ -105,7 +105,7 @@ describe Pawn do
 
     it 'can\'t move forward if target is occupied' do
       bad_pawn = Pawn.new('white', :a5, board)
-      bad_pawn.move_self(:a4, [0, 1])
+      bad_pawn.move_self(:a4)
       moved = bad_pawn.valid_move?(:a7)
       expect(moved).to be_falsey
     end

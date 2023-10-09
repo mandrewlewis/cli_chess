@@ -20,10 +20,10 @@ class Piece
     find_valid_vector(target, coordinates)
   end
 
-  def move_self(target, vector)
+  def move_self(target)
     @first_move = false
     @board.destroy_piece(target) if capturing?(target)
-    @coordinates = to_coord_sym(apply_vector(vector))
+    @coordinates = target
   end
 
   def capturing?(target)

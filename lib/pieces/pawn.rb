@@ -43,11 +43,11 @@ class Pawn < Piece
     @vectors = @vectors.map { |hash| flip_vector(hash) }
   end
 
-  def move_self(target, vector)
+  def move_self(target)
     @first_move = false
     @board.destroy_piece(target) if capturing?(target)
     preform_en_passant if en_passant?(target)
-    @coordinates = to_coord_sym(apply_vector(vector))
+    @coordinates = target
     promotion if is_a?(Pawn) && %w[1 8].include?(@coordinates[1])
   end
 

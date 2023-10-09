@@ -28,20 +28,20 @@ describe Rook do
     end
 
     it 'backward (w)' do
-      w_rook.move_self(:a8, [0, 7])
+      w_rook.move_self(:a8)
       moved = w_rook.valid_move?(:a3)
       expect(moved).to eql([0, -5])
     end
 
     it 'right (w)' do
-      w_rook.move_self(:a3, [0, 2])
+      w_rook.move_self(:a3)
       moved = w_rook.valid_move?(:h3)
       expect(moved).to eql([7, 0])
     end
 
     it 'left (w)' do
-      w_rook.move_self(:a3, [0, 2])
-      w_rook.move_self(:h3, [7, 0])
+      w_rook.move_self(:a3)
+      w_rook.move_self(:h3)
       moved = w_rook.valid_move?(:a3)
       expect(moved).to eql([-7, 0])
     end

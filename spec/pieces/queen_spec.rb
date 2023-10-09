@@ -27,19 +27,19 @@ describe Queen do
     end
 
     it 'backward (w)' do
-      w_queen.move_self(:d5, [0, 4])
+      w_queen.move_self(:d5)
       moved = w_queen.valid_move?(:d1)
       expect(moved).to eql([0, -4])
     end
 
     it 'right (w)' do
-      w_queen.move_self(:d5, [0, 4])
+      w_queen.move_self(:d5)
       moved = w_queen.valid_move?(:h5)
       expect(moved).to eql([4, 0])
     end
 
     it 'left (w)' do
-      w_queen.move_self(:d5, [0, 4])
+      w_queen.move_self(:d5)
       moved = w_queen.valid_move?(:a5)
       expect(moved).to eql([-3, 0])
     end
@@ -60,13 +60,13 @@ describe Queen do
     end
 
     it 'back left some (w)' do
-      w_queen.move_self(:d5, [0, 4])
+      w_queen.move_self(:d5)
       moved = w_queen.valid_move?(:b3)
       expect(moved).to eql([-2, -2])
     end
 
     it 'back right some (w)' do
-      w_queen.move_self(:d5, [0, 4])
+      w_queen.move_self(:d5)
       moved = w_queen.valid_move?(:f3)
       expect(moved).to eql([2, -2])
     end
