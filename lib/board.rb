@@ -8,13 +8,13 @@ require_relative 'pieces/bishop'
 require_relative 'pieces/queen'
 require_relative 'pieces/king'
 require_relative 'conversions'
+require_relative 'printable'
 
 # Stores board state and actions
 class Board
   include Conversions
+  include Printable
 
-  BORDER_STRING = '  +---+---+---+---+---+---+---+---+'
-  COLUMNS_STRING = "    #{[*'a'..'h'].join('   ')}"
   KEYS = [
     %i[a8 b8 c8 d8 e8 f8 g8 h8],
     %i[a7 b7 c7 d7 e7 f7 g7 h7],
@@ -55,26 +55,6 @@ class Board
         @pieces << Queen.new(color, key, self)
       when /e[18]/
         @pieces << King.new(color, key, self)
-      end
-    end
-  end
-
-  def display_board
-    row_count = 8
-
-    puts COLUMNS_STRING
-    icons_by_row.each do |row_arr|
-      puts BORDER_STRING, "#{row_count} | #{row_arr.join(' | ')} | #{row_count}"
-      row_count -= 1
-    end
-    puts BORDER_STRING, COLUMNS_STRING, ''
-  end
-
-  def icons_by_row
-    KEYS.map do |arr|
-      arr.map do |key|
-        piece = find_piece(key)
-        piece ? piece.icon : ' '
       end
     end
   end

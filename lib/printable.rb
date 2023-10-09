@@ -2,6 +2,9 @@
 
 # Handles printing messages to terminal
 module Printable
+  BORDER_STRING = '  +---+---+---+---+---+---+---+---+'
+  COLUMNS_STRING = "    #{[*'a'..'h'].join('   ')}"
+
   def print_welcome
     system('clear')
     puts <<~HEREDOC
@@ -9,6 +12,26 @@ module Printable
         Welcome to CLI Chess!
       -------------------------
     HEREDOC
+  end
+
+  def display_board(board)
+    row_count = 8
+
+    puts COLUMNS_STRING
+    icons_by_row(board).each do |row_arr|
+      puts BORDER_STRING, "#{row_count} | #{row_arr.join(' | ')} | #{row_count}"
+      row_count -= 1
+    end
+    puts BORDER_STRING, COLUMNS_STRING, ''
+  end
+
+  def icons_by_row(board)
+    board.keys.map do |arr|
+      arr.map do |key|
+        piece = board.find_piece(key)
+        piece ? piece.icon : ' '
+      end
+    end
   end
 
   def print_request_name(index)
@@ -36,9 +59,9 @@ module Printable
     puts "    ✖ #{error[1]}", ''
   end
 
-  def print_game_over(player)
+  def print_game_over(player, board)
     system('clear')
-    @board.display_board
+    display_board(board)
     print "GAME OVER, #{player.name} wins!"
     sleep(5)
   end

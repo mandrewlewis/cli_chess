@@ -56,7 +56,7 @@ class Game
   def player_turn
     loop do
       system('clear')
-      @board.display_board
+      display_board(@board)
       flash_msg
 
       piece = request_piece
