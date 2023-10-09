@@ -27,6 +27,12 @@ module Conversions
     [to_coord_sym(left), to_coord_sym(right)]
   end
 
+  def flip_vector(vector)
+    return [vector[0], -vector[1]] if vector.is_a?(Array)
+
+    vector.map { |k, v| k == :condition ? [k, v] : [k, [v[0], -v[1]]] }.to_h
+  end
+
   def minimize_vector(vector)
     [
       vector[0].zero? ? 0 : vector[0] / (vector[0]).abs,
@@ -40,5 +46,14 @@ module Conversions
       vector[0] - mini[0],
       vector[1] - mini[1]
     ]
+  end
+
+  def trim_vector_to_target(vector, target)
+    until vector == minimize_vector(vector)
+      return vector if apply_vector(vector) == to_int_pair(target)
+
+      vector = trim_vector_by_one(vector)
+    end
+    vector
   end
 end
