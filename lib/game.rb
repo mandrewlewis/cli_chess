@@ -24,16 +24,15 @@ class Game
   end
 
   def start_game
-    dev_setup_method
     print_welcome
     assign_players
     game_loop
   end
 
+  private
+
   def assign_players
-    2.times do |i|
-      @players << Player.new(print_request_name(i), i.zero? ? 'white' : 'black')
-    end
+    2.times { |i| @players << Player.new(print_request_name(i), i.zero? ? 'white' : 'black') }
     @players = @players.cycle
     @current_player = @players.next
   end
@@ -41,22 +40,17 @@ class Game
   def game_loop
     until game_over?
       piece, target, vector = player_turn
+
       capture = piece.capturing?(target)
       @flash = ['notice', "#{capture.color.capitalize} #{capture.class.to_s.downcase} captured!"] if capture
-      piece.handle_castling(target, vector) if piece.is_a?(King)
-      @board.move_piece(piece, target, vector)
-      @current_player = @players.next
-      @previous_move = [piece, target, vector]
-      @check = check?
-      @mate = check_mate? if @check
 
-      if @check
-        @flash = @flash.nil? ? ['notice', 'Check!'] : @flash.push('Check!')
-      end
+      piece.handle_castling(target, vector) if piece.is_a?(King)
+
+      setup_next_turn(piece, target, vector)
+
+      @flash = @flash.nil? ? ['notice', 'Check!'] : @flash.push('Check!') if @check
     end
-    system('clear')
-    @board.display_board
-    print_game_over(@players.next)
+    print_game_over(@players.next, @board)
   end
 
   def player_turn
@@ -96,6 +90,14 @@ class Game
       @flash = ['error', 'Must get out of check']
     end
     [target, vector]
+  end
+
+  def setup_next_turn(piece, target, vector)
+    @board.move_piece(piece, target, vector)
+    @current_player = @players.next
+    @previous_move = [piece, target, vector]
+    @check = check?
+    @mate = check_mate? if @check
   end
 
   def check?
@@ -152,10 +154,5 @@ class Game
 
     @flash[0] == 'notice' ? print_flash_notice(@flash) : print_flash_error(@flash)
     @flash = nil
-  end
-
-  def dev_setup_method
-    remove_pieces = %i[]
-    @board.pieces.reject! { |p| remove_pieces.include?(p.coordinates) }
   end
 end

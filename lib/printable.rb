@@ -37,6 +37,8 @@ module Printable
   end
 
   def print_game_over(player)
+    system('clear')
+    @board.display_board
     print "GAME OVER, #{player.name} wins!"
     sleep(5)
   end
