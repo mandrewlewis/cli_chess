@@ -22,8 +22,10 @@ describe King do
     end
 
     it 'forward and capture (w)' do
-      w_king.move_self(:e6)
-      moved = w_king.valid_move?(:e7)
+      b_pawn = board.find_piece(:e7)
+      b_pawn.move_self(:e5)
+      w_king.move_self(:e4)
+      moved = w_king.valid_move?(:e5)
       expect(moved).to eql([0, 1])
     end
 

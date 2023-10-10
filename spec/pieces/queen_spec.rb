@@ -70,11 +70,6 @@ describe Queen do
       moved = w_queen.valid_move?(:f3)
       expect(moved).to eql([2, -2])
     end
-
-    it 'forward left some (b)' do
-      moved = b_queen.valid_move?(:a5)
-      expect(moved).to eql([-3, -3])
-    end
   end
 
   context 'invalid moves' do

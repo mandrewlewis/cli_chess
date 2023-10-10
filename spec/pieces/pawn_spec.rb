@@ -57,11 +57,11 @@ describe Pawn do
     end
 
     it 'en passant' do
-      pawn = Pawn.new('white', :e5, board)
-      real_b_pawn = board.find_piece(:f7)
-      real_b_pawn.move_self(:f5)
-      game.previous_move = [real_b_pawn, :f5, [0, -2]]
-      moved = pawn.valid_move?(:f6)
+      w_pawn.move_self(:e5)
+      b_pawn2 = board.find_piece(:f7)
+      b_pawn2.move_self(:f5)
+      game.previous_move = [b_pawn2, :f5, [0, -2]]
+      moved = w_pawn.valid_move?(:f6)
       expect(moved).to eql([1, 1])
     end
 

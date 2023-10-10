@@ -61,7 +61,8 @@ class Piece
     return nil if vector.nil? ||
                   piece_in_path?(to_int_pair(target), vector, coordinates) ||
                   out_of_bounds?(target) ||
-                  same_color?(target)
+                  same_color?(target) ||
+                  move_will_put_player_into_check?(target, @board.game.current_player&.color)
 
     vector
   end
