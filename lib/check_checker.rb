@@ -18,7 +18,9 @@ module CheckChecker
     true
   end
 
-  def move_will_put_player_into_check?(target, player_color)
+  def move_will_put_player_into_check?(target, player_color, player_selected)
+    return nil unless player_selected
+
     create_temp_board_state(target)
     player_color = 'white' if player_color.nil?
     result = king_under_attack?(player_color)

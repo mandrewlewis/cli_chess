@@ -24,8 +24,8 @@ class Piece
     @coordinates = target
   end
 
-  def valid_move?(target, coordinates = @coordinates)
-    valid_vector?(target, coordinates)
+  def valid_move?(target, coordinates = @coordinates, player_selected = nil)
+    valid_vector?(target, coordinates, player_selected)
   end
 
   def capturing?(target)
@@ -56,13 +56,13 @@ class Piece
 
   private
 
-  def valid_vector?(target, coordinates)
+  def valid_vector?(target, coordinates, player_selected = nil)
     vector = find_move(target, coordinates)
     return nil if vector.nil? ||
                   piece_in_path?(to_int_pair(target), vector, coordinates) ||
                   out_of_bounds?(target) ||
                   same_color?(target) ||
-                  move_will_put_player_into_check?(target, @board.game.current_player&.color)
+                  move_will_put_player_into_check?(target, @board.game.current_player&.color, player_selected)
 
     vector
   end

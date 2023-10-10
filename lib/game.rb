@@ -13,8 +13,8 @@ class Game
   include Conversions
   include CheckChecker
 
-  attr_reader :players, :board, :check, :mate
-  attr_accessor :current_player, :error, :flash, :previous_move
+  attr_reader :players, :board, :mate
+  attr_accessor :current_player, :error, :flash, :previous_move, :check
 
   def initialize
     @players = []
@@ -83,7 +83,7 @@ class Game
 
   def request_target(piece)
     target = to_coord_sym(print_request_target(piece))
-    vector = piece.valid_move?(target) unless piece.out_of_bounds?(target)
+    vector = piece.valid_move?(target, piece.coordinates, true) unless piece.out_of_bounds?(target)
     if target.nil? || piece.out_of_bounds?(target)
       @flash = ['error', 'Not a valid target']
     elsif vector.nil?

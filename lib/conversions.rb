@@ -5,7 +5,7 @@ module Conversions
   def to_int_pair(coordinates = @coordinates)
     return coordinates if coordinates.is_a?(Array)
 
-    int_pair = [[*'a'..'h'].find_index(coordinates.downcase[0]),
+    int_pair = [[*'a'..'h'].find_index(coordinates[0].downcase),
                 coordinates[1].to_i - 1]
     int_pair.any?(&:nil?) ? nil : int_pair
   end
