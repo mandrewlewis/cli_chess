@@ -56,4 +56,12 @@ module Conversions
     end
     vector
   end
+
+  def valid_vectors_only(vectors, target)
+    valid_vectors = []
+    vectors.select { |hash| condition_met?(hash, target) }.each do |hash|
+      hash.each_value { |value| valid_vectors << value if value.is_a?(Array) }
+    end
+    valid_vectors
+  end
 end
