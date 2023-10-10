@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 require_relative 'conversions'
+require_relative 'check_checker'
 
 # Generic piece
 class Piece
   include Conversions
+  include CheckChecker
 
   attr_accessor :coordinates
   attr_reader :icon, :color, :board, :first_move
