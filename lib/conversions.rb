@@ -64,4 +64,8 @@ module Conversions
     end
     valid_vectors
   end
+
+  def humanized_class
+    self.class.to_s.split('::')[-1].downcase
+  end
 end

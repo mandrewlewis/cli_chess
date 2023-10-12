@@ -44,7 +44,7 @@ class Game
       piece, target, vector = player_turn
 
       capture = piece.capturing?(target)
-      @flash = ['notice', "#{capture.color.capitalize} #{capture.class.to_s.downcase} captured!"] if capture
+      @flash = ['notice', "#{capture.color.capitalize} #{capture.humanized_class} captured!"] if capture
 
       piece.handle_castling(target, vector) if piece.is_a?(Piece::King)
 

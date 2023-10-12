@@ -46,7 +46,8 @@ module Printable
   end
 
   def print_request_target(piece)
-    print "Move #{piece.class.to_s.downcase} where? -> "
+    subclass = piece.humanized_class
+    print "Move #{subclass} where? -> "
     gets.chomp
   end
 
