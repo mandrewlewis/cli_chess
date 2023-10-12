@@ -73,16 +73,18 @@ module CheckChecker
   end
 
   def create_temp_board_state(target)
-    store_state
+    store_state(target)
     @board.destroy_piece(target) if capturing?(target)
     @coordinates = target
   end
 
-  def store_state
+  def store_state(target)
     @state = [@board.pieces, @coordinates]
+    @state << capturing?(target)
   end
 
   def restore_state
-    @board.pieces, @coordinates = @state
+    @board.pieces, @coordinates, target = @state
+    @board.pieces << target unless target.nil? || @board.pieces.include?(target)
   end
 end
