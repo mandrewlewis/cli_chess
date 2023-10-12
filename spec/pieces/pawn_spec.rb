@@ -5,7 +5,7 @@ require './lib/board'
 require './lib/pieces/piece'
 require './lib/pieces/pawn'
 
-describe Pawn do
+describe Piece::Pawn do
   let(:game) { Game.new }
   let(:board) { game.board }
   let(:w_pawn) { board.find_piece(:b2) }
@@ -23,13 +23,13 @@ describe Pawn do
     end
 
     it 'capture left (w)' do
-      board.pieces << Pawn.new('black', :a3, board)
+      board.pieces << Piece::Pawn.new('black', :a3, board)
       moved = w_pawn.valid_move?(:a3)
       expect(moved).to eql([-1, 1])
     end
 
     it 'capture right (w)' do
-      board.pieces << Pawn.new('black', :c3, board)
+      board.pieces << Piece::Pawn.new('black', :c3, board)
       moved = w_pawn.valid_move?(:c3)
       expect(moved).to eql([1, 1])
     end
@@ -45,13 +45,13 @@ describe Pawn do
     end
 
     it 'capture left (b)' do
-      board.pieces << Pawn.new('white', :f6, board)
+      board.pieces << Piece::Pawn.new('white', :f6, board)
       moved = b_pawn.valid_move?(:f6)
       expect(moved).to eql([-1, -1])
     end
 
     it 'capture right (b)' do
-      board.pieces << Pawn.new('white', :h6, board)
+      board.pieces << Piece::Pawn.new('white', :h6, board)
       moved = b_pawn.valid_move?(:h6)
       expect(moved).to eql([1, -1])
     end
@@ -79,32 +79,32 @@ describe Pawn do
 
   context 'invalid moves' do
     it 'can\'t move off the board' do
-      bad_pawn = Pawn.new('white', :a8, board)
+      bad_pawn = Piece::Pawn.new('white', :a8, board)
       moved = bad_pawn.valid_move?(:a9)
       expect(moved).to be_falsey
     end
 
     it 'can\'t capture same color piece' do
-      bad_pawn1 = Pawn.new('black', :a8, board)
+      bad_pawn1 = Piece::Pawn.new('black', :a8, board)
       moved = bad_pawn1.valid_move?(:b7)
       expect(moved).to be_falsey
     end
 
     it 'can\'t move forward two if not initial move' do
-      bad_pawn = Pawn.new('white', :a2, board)
+      bad_pawn = Piece::Pawn.new('white', :a2, board)
       bad_pawn.move_self(:a3)
       moved = bad_pawn.valid_move?(:a5)
       expect(moved).to be_falsey
     end
 
     it 'can\'t move diagonally if not capturing' do
-      bad_pawn = Pawn.new('white', :a2, board)
+      bad_pawn = Piece::Pawn.new('white', :a2, board)
       moved = bad_pawn.valid_move?(:b3)
       expect(moved).to be_falsey
     end
 
     it 'can\'t move forward if target is occupied' do
-      bad_pawn = Pawn.new('white', :a5, board)
+      bad_pawn = Piece::Pawn.new('white', :a5, board)
       bad_pawn.move_self(:a4)
       moved = bad_pawn.valid_move?(:a7)
       expect(moved).to be_falsey

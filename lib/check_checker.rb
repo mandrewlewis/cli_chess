@@ -5,7 +5,7 @@ module CheckChecker
   @state = []
 
   def check?
-    king = @board.pieces.find { |p| p.is_a?(King) && p.color == @current_player.color }
+    king = @board.pieces.find { |p| p.is_a?(Piece::King) && p.color == @current_player.color }
     @previous_move[0].valid_move?(king.coordinates)
   end
 
@@ -29,7 +29,7 @@ module CheckChecker
   end
 
   def king_under_attack?(player_color)
-    king = @board.pieces.find { |p| p.is_a?(King) && p.color == player_color }
+    king = @board.pieces.find { |p| p.is_a?(Piece::King) && p.color == player_color }
     opp_pieces = @board.pieces.reject { |p| p.color == player_color }
     opp_pieces.each { |opp| return true if opp.can_attack_king?(king.coordinates, opp.coordinates) }
     false
@@ -46,7 +46,7 @@ module CheckChecker
   end
 
   def check_resolved?(piece, target)
-    king = @board.pieces.find { |p| p.is_a?(King) && p.color == @current_player.color }
+    king = @board.pieces.find { |p| p.is_a?(Piece::King) && p.color == @current_player.color }
     king_moved_out_of_check?(piece, target, king) ||
       captured_attacker?(piece, target) ||
       piece_in_path_to_king?(piece, target, king)

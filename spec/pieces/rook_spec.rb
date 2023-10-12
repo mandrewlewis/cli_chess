@@ -5,7 +5,7 @@ require './lib/board'
 require './lib/pieces/piece'
 require './lib/pieces/pawn'
 
-describe Rook do
+describe Piece::Rook do
   let(:game) { Game.new }
   let(:board) { game.board }
   let(:w_rook) { board.find_piece(:a1) }

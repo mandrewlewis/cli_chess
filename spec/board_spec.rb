@@ -33,7 +33,7 @@ describe Board do
     end
 
     it 'has two kings' do
-      kings = pieces.select { |p| p.is_a?(King) }
+      kings = pieces.select { |p| p.is_a?(Piece::King) }
       expect(kings.size).to eql(2)
     end
   end
@@ -59,11 +59,11 @@ describe Board do
 
   describe '#find_piece' do
     it 'should return the piece at the given coordinate symbol' do
-      expect(board.find_piece(:d8).class).to eql(Queen)
+      expect(board.find_piece(:d8).class).to eql(Piece::Queen)
     end
 
     it 'should return the piece at the given coordinate string' do
-      expect(board.find_piece('e8').class).to eql(King)
+      expect(board.find_piece('e8').class).to eql(Piece::King)
     end
   end
 

@@ -4,7 +4,7 @@ require './lib/game'
 require './lib/board'
 require './lib/pieces/piece'
 
-describe Bishop do
+describe Piece::Bishop do
   let(:game) { Game.new }
   let(:board) { game.board }
   let(:w_bishop) { board.find_piece(:c1) }

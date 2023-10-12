@@ -44,17 +44,17 @@ class Board
       when /\D[3456]/
         next
       when /\D[27]/
-        @pieces <<  Pawn.new(color, key, self)
+        @pieces <<  Piece::Pawn.new(color, key, self)
       when /[ah][18]/
-        @pieces <<  Rook.new(color, key, self)
+        @pieces <<  Piece::Rook.new(color, key, self)
       when /[bg][18]/
-        @pieces << Knight.new(color, key, self)
+        @pieces << Piece::Knight.new(color, key, self)
       when /[cf][18]/
-        @pieces << Bishop.new(color, key, self)
+        @pieces << Piece::Bishop.new(color, key, self)
       when /d[18]/
-        @pieces << Queen.new(color, key, self)
+        @pieces << Piece::Queen.new(color, key, self)
       when /e[18]/
-        @pieces << King.new(color, key, self)
+        @pieces << Piece::King.new(color, key, self)
       end
     end
   end

@@ -41,7 +41,7 @@ class Piece
 
   def piece_in_path?(target, vector, coordinates = @coordinates)
     until coordinates == to_coord_sym(target)
-      return false if out_of_bounds?(coordinates) || is_a?(Knight)
+      return false if out_of_bounds?(coordinates) || is_a?(Piece::Knight)
 
       if coordinates != @coordinates
         blocked = @board.find_piece(coordinates)
@@ -69,7 +69,7 @@ class Piece
 
   def find_move(target, coordinates)
     valid_vectors_only(@vectors, target).each do |vector|
-      vector = trim_vector_to_target(vector, target) unless piece_in_path?(target, vector) || is_a?(Knight)
+      vector = trim_vector_to_target(vector, target) unless piece_in_path?(target, vector) || is_a?(Piece::Knight)
       return vector if apply_vector(vector, coordinates) == to_int_pair(target)
     end
     nil

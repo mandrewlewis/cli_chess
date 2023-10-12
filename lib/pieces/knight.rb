@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Piece
+class Piece
   # Knight
   class Knight < Piece
     VECTORS = [

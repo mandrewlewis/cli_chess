@@ -12,13 +12,13 @@ describe Piece do
 
   describe '#move_self' do
     it 'piece changes coordinates to target value' do
-      pawn = pieces.find { |p| p.coordinates == :a2 && p.is_a?(Pawn) }
+      pawn = pieces.find { |p| p.coordinates == :a2 && p.is_a?(Piece::Pawn) }
       pawn.move_self(:a3)
       expect(pawn.coordinates).to eql(:a3)
     end
 
     it 'black piece moves in its relative direction' do
-      pawn_black = pieces.find { |p| p.coordinates == :a7 && p.is_a?(Pawn) }
+      pawn_black = pieces.find { |p| p.coordinates == :a7 && p.is_a?(Piece::Pawn) }
       pawn_black.move_self(:a6)
       expect(pawn_black.coordinates).to eql(:a6)
     end
@@ -57,13 +57,13 @@ describe Piece do
     end
 
     it 'returns false if capturing, but path clear' do
-      pawn = pieces.find { |p| p.coordinates == :a3 && p.is_a?(Pawn) }
+      pawn = pieces.find { |p| p.coordinates == :a3 && p.is_a?(Piece::Pawn) }
       blocked = pawn.piece_in_path?(pawn.coordinates, [0, 0])
       expect(blocked).to be_falsey
     end
 
     it 'returns true if target out of bounds' do
-      pawn = pieces.find { |p| p.coordinates == :a3 && p.is_a?(Pawn) }
+      pawn = pieces.find { |p| p.coordinates == :a3 && p.is_a?(Piece::Pawn) }
       blocked = pawn.piece_in_path?(:i9, [0, 1])
       expect(blocked).to be_truthy
     end

@@ -46,7 +46,7 @@ class Game
       capture = piece.capturing?(target)
       @flash = ['notice', "#{capture.color.capitalize} #{capture.class.to_s.downcase} captured!"] if capture
 
-      piece.handle_castling(target, vector) if piece.is_a?(King)
+      piece.handle_castling(target, vector) if piece.is_a?(Piece::King)
 
       setup_next_turn(piece, target, vector)
 
@@ -105,7 +105,7 @@ class Game
   def game_over?
     white_pieces = @board.pieces.select { |p| p.color == 'white' }
     black_pieces = @board.pieces.select { |p| p.color == 'black' }
-    kings = @board.pieces.select { |p| p.is_a?(King) }
+    kings = @board.pieces.select { |p| p.is_a?(Piece::King) }
 
     white_pieces.empty? || black_pieces.empty? || kings.size < 2 || @mate
   end

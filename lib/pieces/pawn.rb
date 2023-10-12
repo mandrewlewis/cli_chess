@@ -3,7 +3,7 @@
 require_relative 'queen'
 require_relative '../conversions'
 
-module Piece
+class Piece
   # Pawn
   class Pawn < Piece
     include Conversions
@@ -49,12 +49,12 @@ module Piece
       @board.destroy_piece(target) if capturing?(target)
       preform_en_passant if en_passant?(target)
       @coordinates = target
-      promotion if is_a?(Pawn) && %w[1 8].include?(@coordinates[1])
+      promotion if is_a?(Piece::Pawn) && %w[1 8].include?(@coordinates[1])
     end
 
     def promotion
       @board.destroy_piece(@coordinates)
-      board.pieces << Queen.new(@color, @coordinates, @board)
+      board.pieces << Piece::Queen.new(@color, @coordinates, @board)
     end
 
     def en_passant?(player_target)
