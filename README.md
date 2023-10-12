@@ -1,5 +1,9 @@
 # CLI Chess
 
+<img width="300" alt="Screenshot 2023-10-11 at 10 36 50 PM" src="https://github.com/mandrewlewis/cli_chess/assets/81784056/64fa211c-498d-46eb-b514-dbc3bda63130">
+
+## Overview
+
 This Ruby project will allow two human players to battle each other in the world renown game of intellect, chess, right from the command line interface. This is a fully-operational game that accounts for all chess rules including proper "check" validations and even special moves like "castling" and "en passant." Tests were written in rspec to test critical features, but should not be considered comprehensive.
 
 This project is intended to demonstrate all of the concepts I have learned from The Odin Project's Ruby course.
