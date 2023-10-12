@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative 'conversions'
-require_relative 'check_checker'
+require_relative '../conversions'
+require_relative '../check_checker'
 
 # Generic piece
 class Piece

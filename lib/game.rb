@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'board'
-require_relative 'piece'
+require_relative 'pieces/piece'
 require_relative 'player'
 require_relative 'printable'
 require_relative 'conversions'

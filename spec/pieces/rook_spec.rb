@@ -2,7 +2,7 @@
 
 require './lib/game'
 require './lib/board'
-require './lib/piece'
+require './lib/pieces/piece'
 require './lib/pieces/pawn'
 
 describe Rook do

@@ -2,7 +2,7 @@
 
 require './lib/game'
 require './lib/board'
-require './lib/piece'
+require './lib/pieces/piece'
 
 describe Queen do
   let(:game) { Game.new }
